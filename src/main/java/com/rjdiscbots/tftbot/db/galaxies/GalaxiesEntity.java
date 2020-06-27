@@ -18,6 +18,10 @@ public class GalaxiesEntity implements Serializable {
     @Column(name = "description", nullable = false)
     private String descripiton;
 
+    public GalaxiesEntity() {
+
+    }
+
     public GalaxiesEntity(String key, String name, String descripiton) {
         this.key = key;
         this.name = name;

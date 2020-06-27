@@ -1,8 +1,5 @@
 package com.rjdiscbots.tftbot.discord.message;
 
-import com.rjdiscbots.tftbot.db.galaxies.GalaxiesEntity;
-import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
-import java.util.List;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,11 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageReceivedEventHandler {
 
-    private GalaxiesRepository galaxiesRepository;
+    private GalaxyMessageEventHandler galaxyMessageEventHandler;
 
     @Autowired
-    public MessageReceivedEventHandler(GalaxiesRepository galaxiesRepository) {
-        this.galaxiesRepository = galaxiesRepository;
+    public MessageReceivedEventHandler(GalaxyMessageEventHandler galaxyMessageEventHandler) {
+        this.galaxyMessageEventHandler = galaxyMessageEventHandler;
     }
 
     public void handleMessage(MessageReceivedEvent event) {
@@ -22,25 +19,13 @@ public class MessageReceivedEventHandler {
         String returnMessage = null;
 
         if (rawMessage.startsWith("!galaxy ")) {
-            returnMessage = handleGalaxyMessage(rawMessage);
+            returnMessage = galaxyMessageEventHandler.handleGalaxyMessage(rawMessage);
+        } else if (rawMessage.startsWith("!list galaxy") || rawMessage.startsWith("!list galaxies")) {
+            returnMessage = galaxyMessageEventHandler.handleListGalaxyMessage();
         } else {
             return;
         }
 
         event.getChannel().sendMessage(returnMessage).queue();
     }
-
-    private String handleGalaxyMessage(String rawGalaxyMessage) {
-        rawGalaxyMessage = rawGalaxyMessage.replaceFirst("!galaxy ", "");
-        rawGalaxyMessage = rawGalaxyMessage.replaceAll("\"", "");
-
-        List<GalaxiesEntity> galaxiesEntity = galaxiesRepository.findByName(rawGalaxyMessage);
-
-        if (galaxiesEntity.isEmpty()) {
-            return "No such galaxy exists!";
-        } else {
-            return galaxiesEntity.get(0).getDescripiton();
-        }
-    }
-
 }
