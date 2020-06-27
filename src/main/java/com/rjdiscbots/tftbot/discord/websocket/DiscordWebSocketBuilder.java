@@ -1,7 +1,6 @@
 package com.rjdiscbots.tftbot.discord.websocket;
 
 import com.rjdiscbots.tftbot.config.DiscordConfig;
-import com.rjdiscbots.tftbot.discord.message.MessageReceivedEventHandler;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;

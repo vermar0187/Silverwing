@@ -2,10 +2,9 @@ package com.rjdiscbots.tftbot.db.galaxies;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
-import org.graalvm.compiler.lir.CompositeValue.Component;
 
 @Entity
 @Table(name = "galaxies")
@@ -18,6 +17,12 @@ public class GalaxiesEntity implements Serializable {
 
     @Column(name = "description", nullable = false)
     private String descripiton;
+
+    public GalaxiesEntity(String key, String name, String descripiton) {
+        this.key = key;
+        this.name = name;
+        this.descripiton = descripiton;
+    }
 
     public String getKey() {
         return key;
