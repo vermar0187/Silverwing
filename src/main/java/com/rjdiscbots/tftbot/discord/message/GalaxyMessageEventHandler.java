@@ -1,6 +1,6 @@
 package com.rjdiscbots.tftbot.discord.message;
 
-import com.rjdiscbots.tftbot.db.galaxies.GalaxiesEntity;
+import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +18,19 @@ public class GalaxyMessageEventHandler {
 
     public String handleGalaxyMessage(String rawGalaxyMessage) {
         rawGalaxyMessage = rawGalaxyMessage.replaceFirst("!galaxy ", "");
-        rawGalaxyMessage = rawGalaxyMessage.replaceAll("\"", "");
+        rawGalaxyMessage = rawGalaxyMessage.replaceAll("\"", "").toLowerCase();
 
-        List<GalaxiesEntity> galaxiesEntity = galaxiesRepository.findByName(rawGalaxyMessage);
+        List<GalaxyEntity> galaxyEntity = galaxiesRepository.findByName(rawGalaxyMessage);
 
-        if (galaxiesEntity.isEmpty()) {
+        if (galaxyEntity.isEmpty()) {
             return "No such galaxy exists!";
         } else {
-            return galaxiesEntity.get(0).getDescripiton();
+            return galaxyEntity.get(0).getDescripiton();
         }
     }
 
     public String handleListGalaxyMessage() {
-        List<GalaxiesEntity> galaxiesEntities = galaxiesRepository.findAll();
+        List<GalaxyEntity> galaxiesEntities = galaxiesRepository.findAll();
         StringBuilder allGalaxies = new StringBuilder();
 
         for (int i = 0; i < galaxiesEntities.size(); i++) {

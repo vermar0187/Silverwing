@@ -6,8 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import com.rjdiscbots.tftbot.db.galaxies.GalaxiesEntity;
+import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
+import com.rjdiscbots.tftbot.db.items.ItemsRepository;
 import java.util.ArrayList;
 import java.util.List;
 import net.dv8tion.jda.api.entities.Message;
@@ -23,13 +24,18 @@ public class GalaxyMessageEventHandlerTest {
     @Test
     public void whenMessageIsReceivedIsGalaxy_then_returnDescripiton() {
         GalaxiesRepository galaxiesRepository = mock(GalaxiesRepository.class);
+        ItemsRepository itemsRepository = mock(ItemsRepository.class);
 
-        List<GalaxiesEntity> galaxiesEntities = new ArrayList<GalaxiesEntity>();
-        galaxiesEntities.add(new GalaxiesEntity("key", "Binary Star", "binary star description"));
-        when(galaxiesRepository.findByName("Binary Star")).thenReturn(galaxiesEntities);
+        List<GalaxyEntity> galaxiesEntities = new ArrayList<GalaxyEntity>();
+        galaxiesEntities.add(new GalaxyEntity("key", "Binary Star", "binary star description"));
+        when(galaxiesRepository.findByName("binary star")).thenReturn(galaxiesEntities);
 
-        GalaxyMessageEventHandler galaxyMessageEventHandler = new GalaxyMessageEventHandler(galaxiesRepository);
-        MessageReceivedEventHandler messageReceivedEventHandler = new MessageReceivedEventHandler(galaxyMessageEventHandler);
+        GalaxyMessageEventHandler galaxyMessageEventHandler = new GalaxyMessageEventHandler(
+            galaxiesRepository);
+        ItemMessageEventHandler itemMessageEventHandler = new ItemMessageEventHandler(
+            itemsRepository);
+        MessageReceivedEventHandler messageReceivedEventHandler = new MessageReceivedEventHandler(
+            galaxyMessageEventHandler, itemMessageEventHandler);
         MessageReceivedEvent messageReceivedEvent = createFakeMessage("!galaxy Binary Star");
 
         messageReceivedEventHandler.handleMessage(messageReceivedEvent);
@@ -43,9 +49,14 @@ public class GalaxyMessageEventHandlerTest {
     @Test
     public void whenMessageIsReceivedIsNotValid_then_doNotSendMessage() {
         GalaxiesRepository galaxiesRepository = mock(GalaxiesRepository.class);
+        ItemsRepository itemsRepository = mock(ItemsRepository.class);
 
-        GalaxyMessageEventHandler galaxyMessageEventHandler = new GalaxyMessageEventHandler(galaxiesRepository);
-        MessageReceivedEventHandler messageReceivedEventHandler = new MessageReceivedEventHandler(galaxyMessageEventHandler);
+        GalaxyMessageEventHandler galaxyMessageEventHandler = new GalaxyMessageEventHandler(
+            galaxiesRepository);
+        ItemMessageEventHandler itemMessageEventHandler = new ItemMessageEventHandler(
+            itemsRepository);
+        MessageReceivedEventHandler messageReceivedEventHandler = new MessageReceivedEventHandler(
+            galaxyMessageEventHandler, itemMessageEventHandler);
         MessageReceivedEvent messageReceivedEvent = createFakeMessage("!galaxybad");
 
         messageReceivedEventHandler.handleMessage(messageReceivedEvent);
@@ -56,12 +67,17 @@ public class GalaxyMessageEventHandlerTest {
     @Test
     public void whenMessageIsReceivedIsGalaxyButNotFound_then_sendInvalidGalaxyMessage() {
         GalaxiesRepository galaxiesRepository = mock(GalaxiesRepository.class);
+        ItemsRepository itemsRepository = mock(ItemsRepository.class);
 
-        List<GalaxiesEntity> galaxiesEntities = new ArrayList<GalaxiesEntity>();
+        List<GalaxyEntity> galaxiesEntities = new ArrayList<GalaxyEntity>();
         when(galaxiesRepository.findByName("Invalid Galaxy")).thenReturn(galaxiesEntities);
 
-        GalaxyMessageEventHandler galaxyMessageEventHandler = new GalaxyMessageEventHandler(galaxiesRepository);
-        MessageReceivedEventHandler messageReceivedEventHandler = new MessageReceivedEventHandler(galaxyMessageEventHandler);
+        GalaxyMessageEventHandler galaxyMessageEventHandler = new GalaxyMessageEventHandler(
+            galaxiesRepository);
+        ItemMessageEventHandler itemMessageEventHandler = new ItemMessageEventHandler(
+            itemsRepository);
+        MessageReceivedEventHandler messageReceivedEventHandler = new MessageReceivedEventHandler(
+            galaxyMessageEventHandler, itemMessageEventHandler);
         MessageReceivedEvent messageReceivedEvent = createFakeMessage("!galaxy Invalid Galaxy");
 
         messageReceivedEventHandler.handleMessage(messageReceivedEvent);

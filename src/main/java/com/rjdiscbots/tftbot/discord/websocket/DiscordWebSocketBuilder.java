@@ -17,7 +17,8 @@ public class DiscordWebSocketBuilder {
     }
 
     @Autowired
-    public DiscordWebSocketBuilder(DiscordConfig discordConfig, DiscordWebSocket discordWebSocket) throws LoginException {
+    public DiscordWebSocketBuilder(DiscordConfig discordConfig, DiscordWebSocket discordWebSocket)
+        throws LoginException {
         jdaBuilder = new JDABuilder(AccountType.BOT);
         jdaBuilder.setToken(discordConfig.getToken());
         jdaBuilder.addEventListeners(discordWebSocket);

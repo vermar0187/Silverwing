@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GalaxiesRepository extends JpaRepository<GalaxiesEntity, Long> {
-    List<GalaxiesEntity> findByName(String name);
+public interface GalaxiesRepository extends JpaRepository<GalaxyEntity, Long> {
+
+    List<GalaxyEntity> findByName(String name);
 }

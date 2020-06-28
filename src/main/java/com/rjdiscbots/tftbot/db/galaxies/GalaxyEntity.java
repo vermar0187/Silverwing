@@ -8,7 +8,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "galaxies")
-public class GalaxiesEntity implements Serializable {
+public class GalaxyEntity implements Serializable {
+
     @Id
     private String key;
 
@@ -18,11 +19,11 @@ public class GalaxiesEntity implements Serializable {
     @Column(name = "description", nullable = false)
     private String descripiton;
 
-    public GalaxiesEntity() {
+    public GalaxyEntity() {
 
     }
 
-    public GalaxiesEntity(String key, String name, String descripiton) {
+    public GalaxyEntity(String key, String name, String descripiton) {
         this.key = key;
         this.name = name;
         this.descripiton = descripiton;
