@@ -18,28 +18,18 @@ public class GalaxyMessageEventHandler {
 
     public String handleGalaxyMessage(String rawGalaxyMessage) {
         rawGalaxyMessage = rawGalaxyMessage.replaceFirst("!galaxy ", "");
-        rawGalaxyMessage = rawGalaxyMessage.replaceAll("\"", "").toLowerCase();
+        rawGalaxyMessage = rawGalaxyMessage.trim();
 
-        List<GalaxyEntity> galaxyEntity = galaxiesRepository.findByName(rawGalaxyMessage);
+        return fetchGalaxyDescription(rawGalaxyMessage);
+    }
+
+    private String fetchGalaxyDescription(String galaxy) {
+        List<GalaxyEntity> galaxyEntity = galaxiesRepository.findByName(galaxy);
 
         if (galaxyEntity.isEmpty()) {
             return "No such galaxy exists!";
         } else {
             return galaxyEntity.get(0).getDescripiton();
         }
-    }
-
-    public String handleListGalaxyMessage() {
-        List<GalaxyEntity> galaxiesEntities = galaxiesRepository.findAll();
-        StringBuilder allGalaxies = new StringBuilder();
-
-        for (int i = 0; i < galaxiesEntities.size(); i++) {
-            if (i != 0) {
-                allGalaxies.append("\n");
-            }
-            allGalaxies.append(galaxiesEntities.get(i).getName());
-        }
-
-        return allGalaxies.toString();
     }
 }

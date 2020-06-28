@@ -2,7 +2,13 @@ package com.rjdiscbots.tftbot.discord.message;
 
 import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +24,13 @@ public class ItemMessageEventHandler {
 
     public String handleItemMessage(String rawItemMessage) {
         rawItemMessage = rawItemMessage.replaceFirst("!item ", "");
-        rawItemMessage = rawItemMessage.replaceAll("\"", "").toLowerCase();
+        rawItemMessage = rawItemMessage.trim();
 
-        List<ItemEntity> itemEntities = itemsRepository.findByName(rawItemMessage);
+        return fetchItemDescription(rawItemMessage);
+    }
+
+    private String fetchItemDescription(String item) {
+        List<ItemEntity> itemEntities = itemsRepository.findByName(item);
 
         StringBuilder itemDesc = new StringBuilder();
         ItemEntity itemEntity = null;
@@ -36,30 +46,6 @@ public class ItemMessageEventHandler {
             itemDesc.append("\n").append("#1: ").append(itemEntity.getComponentOneName());
             itemDesc.append("\n").append("#2: ").append(itemEntity.getComponentTwoName());
         }
-
         return itemDesc.toString();
-    }
-
-    public String handleComponentsMessage(String rawMessage) {
-        List<ItemEntity> itemEntities = itemsRepository
-            .findByComponentOneIsNullAndComponentTwoIsNull();
-
-        StringBuilder componentsDesc = new StringBuilder();
-
-        if (itemEntities.isEmpty()) {
-            return "No such components exists!";
-        }
-
-        for (int i = 0; i < itemEntities.size(); i++) {
-            if (i != 0) {
-                componentsDesc.append("\n");
-            }
-            ItemEntity itemEntity = itemEntities.get(i);
-
-            componentsDesc.append(itemEntity.getName()).append(": ")
-                .append(itemEntity.getDescription());
-        }
-
-        return componentsDesc.toString();
     }
 }
