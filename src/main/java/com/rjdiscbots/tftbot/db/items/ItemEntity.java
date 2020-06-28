@@ -21,20 +21,28 @@ public class ItemEntity {
     @Column(name = "component1")
     private Integer componentOne;
 
+    @Column(name = "component1_name")
+    private String componentOneName;
+
     @Column(name = "component2")
     private Integer componentTwo;
+
+    @Column(name = "component2_name")
+    private String componentTwoName;
 
     public ItemEntity() {
 
     }
 
     public ItemEntity(int id, String name, String description, Integer componentOne,
-        Integer componentTwo) {
+        Integer componentTwo, String componentOneName, String componentTwoName) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.componentOne = componentOne;
+        this.componentOneName = componentOneName;
         this.componentTwo = componentTwo;
+        this.componentTwoName = componentTwoName;
     }
 
     public int getId() {
@@ -75,5 +83,21 @@ public class ItemEntity {
 
     public void setComponentTwo(Integer componentTwo) {
         this.componentTwo = componentTwo;
+    }
+
+    public String getComponentOneName() {
+        return componentOneName;
+    }
+
+    public void setComponentOneName(String componentOneName) {
+        this.componentOneName = componentOneName;
+    }
+
+    public String getComponentTwoName() {
+        return componentTwoName;
+    }
+
+    public void setComponentTwoName(String componentTwoName) {
+        this.componentTwoName = componentTwoName;
     }
 }

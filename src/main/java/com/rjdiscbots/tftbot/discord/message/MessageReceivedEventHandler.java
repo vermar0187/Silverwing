@@ -28,6 +28,8 @@ public class MessageReceivedEventHandler {
             returnMessage = galaxyMessageEventHandler.handleListGalaxyMessage();
         } else if (rawMessage.startsWith("!item ")) {
             returnMessage = itemMessageEventHandler.handleItemMessage(rawMessage);
+        } else if (rawMessage.startsWith("!list components")) {
+            returnMessage = itemMessageEventHandler.handleComponentsMessage(rawMessage);
         } else {
             return;
         }

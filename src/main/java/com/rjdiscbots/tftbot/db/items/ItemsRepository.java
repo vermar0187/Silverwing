@@ -6,8 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemsRepository extends JpaRepository<ItemEntity, Long> {
-
-    List<ItemEntity> findById(int id);
-
     List<ItemEntity> findByName(String name);
+
+    List<ItemEntity> findByComponentOneIsNullAndComponentTwoIsNull();
 }

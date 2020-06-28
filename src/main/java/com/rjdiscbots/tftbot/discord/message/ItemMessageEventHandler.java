@@ -33,15 +33,33 @@ public class ItemMessageEventHandler {
         }
 
         if (itemEntity.getComponentOne() != null && itemEntity.getComponentTwo() != null) {
-            ItemEntity componentOne = itemsRepository.findById(itemEntity.getComponentOne())
-                .get(0);
-            ItemEntity componentTwo = itemsRepository.findById(itemEntity.getComponentTwo())
-                .get(0);
-
-            itemDesc.append("\n").append("#1: ").append(componentOne.getName());
-            itemDesc.append("\n").append("#2: ").append(componentTwo.getName());
+            itemDesc.append("\n").append("#1: ").append(itemEntity.getComponentOneName());
+            itemDesc.append("\n").append("#2: ").append(itemEntity.getComponentTwoName());
         }
 
         return itemDesc.toString();
+    }
+
+    public String handleComponentsMessage(String rawMessage) {
+        List<ItemEntity> itemEntities = itemsRepository
+            .findByComponentOneIsNullAndComponentTwoIsNull();
+
+        StringBuilder componentsDesc = new StringBuilder();
+
+        if (itemEntities.isEmpty()) {
+            return "No such components exists!";
+        }
+
+        for (int i = 0; i < itemEntities.size(); i++) {
+            if (i != 0) {
+                componentsDesc.append("\n");
+            }
+            ItemEntity itemEntity = itemEntities.get(i);
+
+            componentsDesc.append(itemEntity.getName()).append(": ")
+                .append(itemEntity.getDescription());
+        }
+
+        return componentsDesc.toString();
     }
 }

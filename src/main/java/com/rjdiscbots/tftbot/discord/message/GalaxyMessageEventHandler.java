@@ -34,11 +34,10 @@ public class GalaxyMessageEventHandler {
         StringBuilder allGalaxies = new StringBuilder();
 
         for (int i = 0; i < galaxiesEntities.size(); i++) {
-            if (i == 0) {
-                allGalaxies.append(galaxiesEntities.get(i).getName());
-            } else {
-                allGalaxies.append("\n").append(galaxiesEntities.get(i).getName());
+            if (i != 0) {
+                allGalaxies.append("\n");
             }
+            allGalaxies.append(galaxiesEntities.get(i).getName());
         }
 
         return allGalaxies.toString();
