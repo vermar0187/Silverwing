@@ -2,7 +2,6 @@ package com.rjdiscbots.tftbot.discord.message;
 
 import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;

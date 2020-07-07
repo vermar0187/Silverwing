@@ -1,7 +1,7 @@
 package com.rjdiscbots.tftbot.discord.message;
 
-import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
+import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
