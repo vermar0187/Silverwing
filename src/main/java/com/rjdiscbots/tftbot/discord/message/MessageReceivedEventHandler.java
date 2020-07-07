@@ -11,16 +11,19 @@ public class MessageReceivedEventHandler {
     private ItemMessageEventHandler itemMessageEventHandler;
     private ListMessageEventHandler listMessageEventHandler;
     private BuildMessageEventHandler buildMessageEventHandler;
+    private SynergyMessageEventHandler synergyMessageEventHandler;
 
     @Autowired
     public MessageReceivedEventHandler(GalaxyMessageEventHandler galaxyMessageEventHandler,
         ItemMessageEventHandler itemMessageEventHandler,
         BuildMessageEventHandler buildMessageEventHandler,
-        ListMessageEventHandler listMessageEventHandler) {
+        ListMessageEventHandler listMessageEventHandler,
+        SynergyMessageEventHandler synergyMessageEventHandler) {
         this.galaxyMessageEventHandler = galaxyMessageEventHandler;
         this.itemMessageEventHandler = itemMessageEventHandler;
         this.buildMessageEventHandler = buildMessageEventHandler;
         this.listMessageEventHandler = listMessageEventHandler;
+        this.synergyMessageEventHandler = synergyMessageEventHandler;
     }
 
     public void handleMessage(MessageReceivedEvent event) {
@@ -36,6 +39,8 @@ public class MessageReceivedEventHandler {
             returnMessage = itemMessageEventHandler.handleItemMessage(rawMessage);
         } else if (rawMessage.startsWith("!build ")) {
             returnMessage = buildMessageEventHandler.handleBuildMessage(rawMessage);
+        } else if (rawMessage.startsWith("!synergy ")) {
+            returnMessage = synergyMessageEventHandler.handleBuildMessage(rawMessage);
         } else {
             return;
         }

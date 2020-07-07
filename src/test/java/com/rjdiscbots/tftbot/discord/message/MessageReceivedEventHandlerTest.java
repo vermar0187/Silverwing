@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
+import com.rjdiscbots.tftbot.db.synergies.SynergyRepository;
 import java.util.ArrayList;
 import java.util.List;
 import net.dv8tion.jda.api.entities.Message;
@@ -34,14 +35,20 @@ public class MessageReceivedEventHandlerTest {
 
     private BuildMessageEventHandler buildMessageEventHandler;
 
+    private SynergyMessageEventHandler synergyMessageEventHandler;
+
     private GalaxiesRepository galaxiesRepository;
 
     private ItemsRepository itemsRepository;
+
+    private SynergyRepository synergyRepository;
 
     @Before
     public void setup() {
         galaxiesRepository = mock(GalaxiesRepository.class);
         itemsRepository = mock(ItemsRepository.class);
+        synergyRepository = mock(SynergyRepository.class);
+
 
         galaxyMessageEventHandler = new GalaxyMessageEventHandler(galaxiesRepository);
         itemMessageEventHandler = new ItemMessageEventHandler(itemsRepository);
@@ -49,13 +56,14 @@ public class MessageReceivedEventHandlerTest {
         listMessageEventHandler = new ListMessageEventHandler(itemsRepository, galaxiesRepository);
 
         messageReceivedEventHandler = new MessageReceivedEventHandler(galaxyMessageEventHandler,
-            itemMessageEventHandler, buildMessageEventHandler, listMessageEventHandler);
+            itemMessageEventHandler, buildMessageEventHandler, listMessageEventHandler, synergyMessageEventHandler);
     }
 
     @AfterEach
     public void destroy() {
         reset(galaxiesRepository);
         reset(itemsRepository);
+        reset(synergyRepository);
     }
 
     @Test
