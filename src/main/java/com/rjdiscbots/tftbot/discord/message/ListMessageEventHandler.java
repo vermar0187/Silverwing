@@ -30,9 +30,23 @@ public class ListMessageEventHandler {
             return fetchAllGalaxies();
         } else if (rawListMessage.startsWith("components")) {
             return fetchAllComponents();
+        } else if (rawListMessage.startsWith("commands")) {
+            return fetchAllCommands();
         } else {
             return "Invalid !list command";
         }
+    }
+
+    private String fetchAllCommands() {
+        StringBuilder allCommands = new StringBuilder();
+
+        allCommands.append("!list [galaxies, components, commands]").append("\n");
+        allCommands.append("!item <item name>").append("\n");
+        allCommands.append("!galaxy <galaxy name>").append("\n");
+        allCommands.append("!synergy <synergy name>").append("\n");
+        allCommands.append("!build [--desc] <item component 1>, <item component 2>, ...").append("\n");
+
+        return allCommands.toString();
     }
 
     private String fetchAllGalaxies() {

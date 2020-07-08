@@ -19,6 +19,8 @@ public class DiscordWebSocket extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        messageReceivedEventHandler.handleMessage(event);
+        if (!event.isWebhookMessage() && event.getMember() != null && event.getMember().isOwner()) {
+            messageReceivedEventHandler.handleMessage(event);
+        }
     }
 }
