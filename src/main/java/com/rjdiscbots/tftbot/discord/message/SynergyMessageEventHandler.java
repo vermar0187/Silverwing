@@ -1,9 +1,15 @@
 package com.rjdiscbots.tftbot.discord.message;
 
+import com.rjdiscbots.tftbot.db.champions.ChampionsEntity;
+import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
 import com.rjdiscbots.tftbot.db.synergies.SetModel;
 import com.rjdiscbots.tftbot.db.synergies.SynergyEntity;
 import com.rjdiscbots.tftbot.db.synergies.SynergyRepository;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +18,13 @@ public class SynergyMessageEventHandler {
 
     private SynergyRepository synergyRepository;
 
+    private ChampionsRepository championsRepository;
+
     @Autowired
-    public SynergyMessageEventHandler(SynergyRepository synergyRepository) {
+    public SynergyMessageEventHandler(SynergyRepository synergyRepository,
+        ChampionsRepository championsRepository) {
         this.synergyRepository = synergyRepository;
+        this.championsRepository = championsRepository;
     }
 
     public String handleBuildMessage(String rawSynergyMessage) {
@@ -31,9 +41,10 @@ public class SynergyMessageEventHandler {
 
         StringBuilder returnMessage = new StringBuilder();
 
-        synergyName = synergyName.substring(0, 1).toUpperCase() + synergyName.substring(1);
+        String capitalSynergyName =
+            synergyName.substring(0, 1).toUpperCase() + synergyName.substring(1);
 
-        returnMessage.append(synergyName).append("\n");
+        returnMessage.append(capitalSynergyName).append("\n");
         returnMessage.append("Description: ").append(synergy.getDescription()).append("\n");
 
         if (synergy.getInnate() != null) {
@@ -41,7 +52,14 @@ public class SynergyMessageEventHandler {
         }
 
         if (synergy.getSetModel() != null) {
-            for (SetModel setModel : synergy.getSetModel()) {
+            returnMessage.append("Medals: ");
+            List<SetModel> model = synergy.getSetModel();
+            for (int i = 0; i < model.size(); i++) {
+                SetModel setModel = model.get(i);
+                if (i != 0) {
+                    returnMessage.append(", ");
+                }
+
                 String style = setModel.getStyle();
                 style = style.substring(0, 1).toUpperCase() + style.substring(1);
                 Integer min = setModel.getMin();
@@ -50,12 +68,31 @@ public class SynergyMessageEventHandler {
                 returnMessage.append(style).append(" (");
 
                 if (min != null && max != null) {
-                    returnMessage.append(min).append("-").append(max).append(")\n");
+                    returnMessage.append(min).append("-").append(max).append(")");
                 } else if (min != null) {
-                    returnMessage.append(min).append(")\n");
+                    returnMessage.append(min).append(")");
                 } else if (max != null) {
-                    returnMessage.append(max).append(")\n");
+                    returnMessage.append(max).append(")");
                 }
+            }
+        }
+
+        List<ChampionsEntity> championsEntityList = championsRepository
+            .findByTrait(synergyName);
+
+        if (championsEntityList != null) {
+            championsEntityList = championsEntityList.stream()
+                .sorted((Comparator.comparingInt(ChampionsEntity::getCost)))
+                .collect(Collectors.toList());
+
+            returnMessage.append("\nChampions: ");
+            for (int i = 0; i < championsEntityList.size(); i++) {
+                ChampionsEntity championsEntity = championsEntityList.get(i);
+                if (i != 0) {
+                    returnMessage.append(", ");
+                }
+                returnMessage.append(championsEntity.getName()).append(" (")
+                    .append(championsEntity.getCost()).append(")");
             }
         }
 

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
@@ -43,17 +44,22 @@ public class MessageReceivedEventHandlerTest {
 
     private SynergyRepository synergyRepository;
 
+    private ChampionsRepository championsRepository;
+
     @Before
     public void setup() {
         galaxiesRepository = mock(GalaxiesRepository.class);
         itemsRepository = mock(ItemsRepository.class);
         synergyRepository = mock(SynergyRepository.class);
+        championsRepository = mock(ChampionsRepository.class);
 
 
         galaxyMessageEventHandler = new GalaxyMessageEventHandler(galaxiesRepository);
         itemMessageEventHandler = new ItemMessageEventHandler(itemsRepository);
         buildMessageEventHandler = new BuildMessageEventHandler(itemsRepository);
-        listMessageEventHandler = new ListMessageEventHandler(itemsRepository, galaxiesRepository);
+        listMessageEventHandler = new ListMessageEventHandler(itemsRepository, galaxiesRepository,
+            synergyRepository);
+        synergyMessageEventHandler = new SynergyMessageEventHandler(synergyRepository, championsRepository);
 
         messageReceivedEventHandler = new MessageReceivedEventHandler(galaxyMessageEventHandler,
             itemMessageEventHandler, buildMessageEventHandler, listMessageEventHandler, synergyMessageEventHandler);
