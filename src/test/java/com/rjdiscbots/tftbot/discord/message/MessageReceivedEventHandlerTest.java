@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import com.rjdiscbots.tftbot.db.champions.ChampionStatsRepository;
 import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
@@ -38,6 +39,8 @@ public class MessageReceivedEventHandlerTest {
 
     private SynergyMessageEventHandler synergyMessageEventHandler;
 
+    private ChampionMessageEventHandler championMessageEventHandler;
+
     private GalaxiesRepository galaxiesRepository;
 
     private ItemsRepository itemsRepository;
@@ -46,23 +49,29 @@ public class MessageReceivedEventHandlerTest {
 
     private ChampionsRepository championsRepository;
 
+    private ChampionStatsRepository championStatsRepository;
+
     @Before
     public void setup() {
         galaxiesRepository = mock(GalaxiesRepository.class);
         itemsRepository = mock(ItemsRepository.class);
         synergyRepository = mock(SynergyRepository.class);
         championsRepository = mock(ChampionsRepository.class);
-
+        championStatsRepository = mock(ChampionStatsRepository.class);
 
         galaxyMessageEventHandler = new GalaxyMessageEventHandler(galaxiesRepository);
         itemMessageEventHandler = new ItemMessageEventHandler(itemsRepository);
         buildMessageEventHandler = new BuildMessageEventHandler(itemsRepository);
         listMessageEventHandler = new ListMessageEventHandler(itemsRepository, galaxiesRepository,
             synergyRepository);
-        synergyMessageEventHandler = new SynergyMessageEventHandler(synergyRepository, championsRepository);
+        synergyMessageEventHandler = new SynergyMessageEventHandler(synergyRepository,
+            championsRepository);
+        championMessageEventHandler = new ChampionMessageEventHandler(championsRepository,
+            championStatsRepository);
 
         messageReceivedEventHandler = new MessageReceivedEventHandler(galaxyMessageEventHandler,
-            itemMessageEventHandler, buildMessageEventHandler, listMessageEventHandler, synergyMessageEventHandler);
+            itemMessageEventHandler, buildMessageEventHandler, listMessageEventHandler,
+            synergyMessageEventHandler, championMessageEventHandler);
     }
 
     @AfterEach

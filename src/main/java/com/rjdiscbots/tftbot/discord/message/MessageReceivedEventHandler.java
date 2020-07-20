@@ -12,18 +12,21 @@ public class MessageReceivedEventHandler {
     private ListMessageEventHandler listMessageEventHandler;
     private BuildMessageEventHandler buildMessageEventHandler;
     private SynergyMessageEventHandler synergyMessageEventHandler;
+    private ChampionMessageEventHandler championMessageEventHandler;
 
     @Autowired
     public MessageReceivedEventHandler(GalaxyMessageEventHandler galaxyMessageEventHandler,
         ItemMessageEventHandler itemMessageEventHandler,
         BuildMessageEventHandler buildMessageEventHandler,
         ListMessageEventHandler listMessageEventHandler,
-        SynergyMessageEventHandler synergyMessageEventHandler) {
+        SynergyMessageEventHandler synergyMessageEventHandler,
+        ChampionMessageEventHandler championMessageEventHandler) {
         this.galaxyMessageEventHandler = galaxyMessageEventHandler;
         this.itemMessageEventHandler = itemMessageEventHandler;
         this.buildMessageEventHandler = buildMessageEventHandler;
         this.listMessageEventHandler = listMessageEventHandler;
         this.synergyMessageEventHandler = synergyMessageEventHandler;
+        this.championMessageEventHandler = championMessageEventHandler;
     }
 
     public void handleMessage(MessageReceivedEvent event) {
@@ -40,7 +43,9 @@ public class MessageReceivedEventHandler {
         } else if (rawMessage.startsWith("!build ")) {
             returnMessage = buildMessageEventHandler.handleBuildMessage(rawMessage);
         } else if (rawMessage.startsWith("!synergy ")) {
-            returnMessage = synergyMessageEventHandler.handleBuildMessage(rawMessage);
+            returnMessage = synergyMessageEventHandler.handleSynergyMessage(rawMessage);
+        } else if (rawMessage.startsWith("!champion ")) {
+            returnMessage = championMessageEventHandler.handleChampionMessage(rawMessage);
         } else {
             return;
         }

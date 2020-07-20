@@ -5,8 +5,7 @@ import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
 import com.rjdiscbots.tftbot.db.synergies.SetModel;
 import com.rjdiscbots.tftbot.db.synergies.SynergyEntity;
 import com.rjdiscbots.tftbot.db.synergies.SynergyRepository;
-import java.util.Arrays;
-import java.util.Collections;
+import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public class SynergyMessageEventHandler {
         this.championsRepository = championsRepository;
     }
 
-    public String handleBuildMessage(String rawSynergyMessage) {
+    public String handleSynergyMessage(String rawSynergyMessage) {
         String synergyName = rawSynergyMessage.replaceFirst("!synergy ", "");
         synergyName = synergyName.trim();
 
@@ -41,10 +40,7 @@ public class SynergyMessageEventHandler {
 
         StringBuilder returnMessage = new StringBuilder();
 
-        String capitalSynergyName =
-            synergyName.substring(0, 1).toUpperCase() + synergyName.substring(1);
-
-        returnMessage.append(capitalSynergyName).append("\n");
+        returnMessage.append(DiscordMessageHelper.formatName(synergyName)).append("\n");
         returnMessage.append("Description: ").append(synergy.getDescription()).append("\n");
 
         if (synergy.getInnate() != null) {
@@ -91,7 +87,10 @@ public class SynergyMessageEventHandler {
                 if (i != 0) {
                     returnMessage.append(", ");
                 }
-                returnMessage.append(championsEntity.getName()).append(" (")
+
+                String championName = DiscordMessageHelper
+                    .formatName(championsEntity.getName());
+                returnMessage.append(championName).append(" (")
                     .append(championsEntity.getCost()).append(")");
             }
         }
