@@ -1,7 +1,7 @@
 package com.rjdiscbots.tftbot.utility;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,5 +23,9 @@ public class DiscordMessageHelper {
         }
 
         return returnName.toString();
+    }
+
+    public static Double formatDouble(Double dbl) {
+        return BigDecimal.valueOf(dbl).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
     }
 }

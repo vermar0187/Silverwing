@@ -1,5 +1,6 @@
 package com.rjdiscbots.tftbot.discord.message;
 
+import com.rjdiscbots.tftbot.config.DiscordConfig;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsRepository;
 import com.rjdiscbots.tftbot.db.champions.ChampionsEntity;
@@ -27,8 +28,6 @@ public class ChampionMessageEventHandler {
         String championMessage = rawChampionMessage.replaceFirst("!champion ", "");
         championMessage = championMessage.trim();
 
-        System.out.println(championMessage);
-
         List<ChampionsEntity> champions = championsRepository.findByName(championMessage);
         List<ChampionStatsEntity> championStats = championStatsRepository
             .findByChampionOrderByStarsAsc(championMessage);
@@ -55,6 +54,17 @@ public class ChampionMessageEventHandler {
             returnMessage.append(trait);
         }
         returnMessage.append("\n");
+        ChampionStatsEntity championStatsEntity = championStats.get(0);
+        returnMessage.append("DPS: ").append(championStatsEntity.getDps()).append("\n");
+        returnMessage.append("Damage: ").append(championStatsEntity.getDamage()).append("\n");
+        Double attackSpeed = DiscordMessageHelper
+            .formatDouble(championStatsEntity.getAttackSpeed());
+        returnMessage.append("Attack Speed: ").append(attackSpeed).append("\n");
+        returnMessage.append("Range: ").append(championStatsEntity.getRange()).append("\n");
+        returnMessage.append("Mana Total: ").append(championStatsEntity.getInitialMana())
+            .append("/").append(championStatsEntity.getMana()).append("\n");
+        returnMessage.append("Armor: ").append(championStatsEntity.getArmor()).append("\n");
+        returnMessage.append("Magic Resist: ").append(championStatsEntity.getMr()).append("\n");
 
         return returnMessage.toString();
     }

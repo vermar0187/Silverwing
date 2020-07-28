@@ -10,8 +10,8 @@ import javax.persistence.Table;
 public class ChampionStatsEntity {
 
     @Id
-    @Column(name = "cs_id")
-    private int championStatIndex;
+    @Column
+    private String id;
 
     @Column
     private String champion;
@@ -37,6 +37,9 @@ public class ChampionStatsEntity {
     @Column
     private int mana;
 
+    @Column(name = "initial_mana")
+    private int initialMana;
+
     @Column
     private int armor;
 
@@ -47,9 +50,10 @@ public class ChampionStatsEntity {
 
     }
 
-    public ChampionStatsEntity(int championStatIndex, String champion, int stars, int dps,
-        double attackSpeed, int damage, int range, int health, int mana, int armor, int mr) {
-        this.championStatIndex = championStatIndex;
+    public ChampionStatsEntity(String id, String champion, int stars, int dps,
+        double attackSpeed, int damage, int range, int health, int mana, int initialMana, int armor,
+        int mr) {
+        this.id = id;
         this.champion = champion;
         this.stars = stars;
         this.dps = dps;
@@ -58,16 +62,17 @@ public class ChampionStatsEntity {
         this.range = range;
         this.health = health;
         this.mana = mana;
+        this.initialMana = initialMana;
         this.armor = armor;
         this.mr = mr;
     }
 
-    public int getChampionStatIndex() {
-        return championStatIndex;
+    public String getId() {
+        return id;
     }
 
-    public void setChampionStatIndex(int championStatIndex) {
-        this.championStatIndex = championStatIndex;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getChampion() {
@@ -132,6 +137,14 @@ public class ChampionStatsEntity {
 
     public void setMana(int mana) {
         this.mana = mana;
+    }
+
+    public int getInitialMana() {
+        return initialMana;
+    }
+
+    public void setInitialMana(int initialMana) {
+        this.initialMana = initialMana;
     }
 
     public int getArmor() {
