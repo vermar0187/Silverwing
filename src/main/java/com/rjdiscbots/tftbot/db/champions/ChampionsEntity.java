@@ -1,6 +1,7 @@
 package com.rjdiscbots.tftbot.db.champions;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,13 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 @Entity
 @Table(name = "champions")
-@TypeDef(
-    name = "list-array",
-    typeClass = ListArrayType.class
-)
+@TypeDefs({
+    @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),
+    @TypeDef(name = "list-array", typeClass = ListArrayType.class)
+})
 public class ChampionsEntity {
 
     @Id
@@ -34,15 +36,20 @@ public class ChampionsEntity {
     )
     private List<String> traits;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", name = "ability")
+    private String ability;
+
     public ChampionsEntity() {
     }
 
-    public ChampionsEntity(String id, String name, int cost,
-        List<String> traits) {
+    public ChampionsEntity(String id, String name, int cost, List<String> traits,
+        String ability) {
         this.id = id;
         this.name = name;
         this.cost = cost;
         this.traits = traits;
+        this.ability = ability;
     }
 
     public String getId() {
@@ -75,5 +82,13 @@ public class ChampionsEntity {
 
     public void setTraits(List<String> traits) {
         this.traits = traits;
+    }
+
+    public String getAbility() {
+        return ability;
+    }
+
+    public void setAbility(String ability) {
+        this.ability = ability;
     }
 }
