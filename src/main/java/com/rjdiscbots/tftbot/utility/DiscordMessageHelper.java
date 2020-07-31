@@ -19,15 +19,15 @@ public class DiscordMessageHelper {
     public static String formatName(String name) {
         StringBuilder returnName = new StringBuilder(name);
 
-        boolean spaceBefore = true;
+        boolean needCapitilization = true;
 
         for (int i = 0; i < name.length(); i++) {
-            if (spaceBefore) {
+            if (name.charAt(i) == ' ' || name.charAt(i) == '.') {
+                needCapitilization = true;
+            } else if (needCapitilization) {
                 char upperChar = Character.toUpperCase(name.charAt(i));
                 returnName.setCharAt(i, upperChar);
-                spaceBefore = false;
-            } else if (name.charAt(i) == ' ') {
-                spaceBefore = true;
+                needCapitilization = false;
             }
         }
 
@@ -95,7 +95,6 @@ public class DiscordMessageHelper {
                     if (StringUtils.contains(tag, variableName)) {
                         String doubleListStr = formatDoubleList(values);
                         abilityDesc = abilityDesc.replaceFirst(tag, doubleListStr);
-                        break;
                     }
                 }
             }

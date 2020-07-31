@@ -2,6 +2,10 @@ package com.rjdiscbots.tftbot.discord.message;
 
 import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
+import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import com.rjdiscbots.tftbot.exceptions.message.NoArgumentProvidedException;
+import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +24,12 @@ public class BuildMessageEventHandler {
         this.itemsRepository = itemsRepository;
     }
 
-    public String handleBuildMessage(String rawBuildMessage) {
+    public String handleBuildMessage(String rawBuildMessage) throws InvalidMessageException {
+        if (!rawBuildMessage.startsWith("!build ")) {
+            throw new IllegalArgumentException(
+                "Message does begin with !build: " + rawBuildMessage);
+        }
+
         rawBuildMessage = rawBuildMessage.replaceFirst("!build ", "");
         rawBuildMessage = rawBuildMessage.trim();
 
@@ -33,32 +42,38 @@ public class BuildMessageEventHandler {
         return fetchItemBuilds(rawBuildMessage, addDesc);
     }
 
-    private String fetchItemBuilds(String components, boolean addDesc) {
+    private String fetchItemBuilds(String components, boolean addDesc)
+        throws EntityDoesNotExistException, NoArgumentProvidedException {
         List<String> componentsList = Arrays.stream(components.split("[,]")).map(String::trim)
             .collect(Collectors.toList());
 
         if (componentsList.size() == 0) {
-            return "No components provided!";
+            throw new NoArgumentProvidedException("No components provided!");
         }
 
         Set<ItemEntity> fullItems = fetchItems(componentsList);
 
         if (fullItems.size() == 0) {
-            return "Invalid components provided!";
+            throw new EntityDoesNotExistException("Invalid components provided!");
         }
 
-        StringBuilder itemsDesc = new StringBuilder();
+        StringBuilder returnMessage = new StringBuilder();
 
         for (ItemEntity itemEntity : fullItems) {
-            itemsDesc.append("**").append(itemEntity.getName()).append("**");
+            String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
+            returnMessage.append("__").append(formattedItemName).append("__").append("\n");
             if (addDesc) {
-                itemsDesc.append(": ").append(itemEntity.getDescription());
+                returnMessage.append(itemEntity.getDescription());
             }
-            itemsDesc.append(" (").append(itemEntity.getComponentOneName()).append(", ")
-                .append(itemEntity.getComponentTwoName()).append(")");
-            itemsDesc.append("\n");
+            String componentOneName = DiscordMessageHelper
+                .formatName(itemEntity.getComponentOneName());
+            String componentTwoName = DiscordMessageHelper
+                .formatName(itemEntity.getComponentTwoName());
+
+            returnMessage.append(" (").append(componentOneName).append(", ")
+                .append(componentTwoName).append(")").append("\n");
         }
-        return itemsDesc.toString();
+        return returnMessage.toString();
     }
 
     private Set<ItemEntity> fetchItems(List<String> components) {

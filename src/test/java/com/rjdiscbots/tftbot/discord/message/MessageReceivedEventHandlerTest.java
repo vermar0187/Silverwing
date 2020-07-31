@@ -1,6 +1,7 @@
 package com.rjdiscbots.tftbot.discord.message;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -94,7 +95,8 @@ public class MessageReceivedEventHandlerTest {
         ArgumentCaptor<String> argumentCaptor = new ArgumentCaptor<>();
         verify(messageReceivedEvent.getChannel()).sendMessage(argumentCaptor.capture());
 
-        assertEquals("binary star description", argumentCaptor.getValue());
+        String returnMessage = argumentCaptor.getValue();
+        assertTrue(returnMessage.contains("binary star description"));
     }
 
     @Test
@@ -118,7 +120,7 @@ public class MessageReceivedEventHandlerTest {
         ArgumentCaptor<String> argumentCaptor = new ArgumentCaptor<>();
         verify(messageReceivedEvent.getChannel()).sendMessage(argumentCaptor.capture());
 
-        assertEquals("No such galaxy exists!", argumentCaptor.getValue());
+        assertEquals("Invalid galaxy provided!", argumentCaptor.getValue());
     }
 
     private MessageReceivedEvent createFakeMessage(String messageText) {

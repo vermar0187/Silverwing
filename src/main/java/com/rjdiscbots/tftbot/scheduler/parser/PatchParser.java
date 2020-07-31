@@ -3,7 +3,6 @@ package com.rjdiscbots.tftbot.scheduler.parser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rjdiscbots.tftbot.config.DiscordConfig;
-import com.rjdiscbots.tftbot.db.champions.ChampionStatsRepository;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.PostConstruct;

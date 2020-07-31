@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SynergyRepository extends JpaRepository<SynergyEntity, Long> {
+
     List<SynergyEntity> findByName(String name);
 }

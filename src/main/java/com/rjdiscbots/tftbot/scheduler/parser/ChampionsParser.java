@@ -45,7 +45,7 @@ public class ChampionsParser {
             if (traitNodes.isArray()) {
                 ArrayNode traitNodeArray = (ArrayNode) traitNodes;
                 for (JsonNode traitNode : traitNodeArray) {
-                    championTraits.add(traitNode.asText());
+                    championTraits.add(traitNode.asText().toLowerCase());
                 }
             }
 

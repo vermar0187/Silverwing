@@ -6,6 +6,10 @@ import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
 import com.rjdiscbots.tftbot.db.synergies.SynergyEntity;
 import com.rjdiscbots.tftbot.db.synergies.SynergyRepository;
+import com.rjdiscbots.tftbot.exceptions.message.CommandDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +32,12 @@ public class ListMessageEventHandler {
         this.synergyRepository = synergyRepository;
     }
 
-    public String handleListMessage(String rawListMessage) {
+    public String handleListMessage(String rawListMessage) throws InvalidMessageException {
+        if (!rawListMessage.startsWith("!list ")) {
+            throw new IllegalArgumentException(
+                "Message does begin with !list: " + rawListMessage);
+        }
+
         rawListMessage = rawListMessage.replaceFirst("!list ", "");
         rawListMessage = rawListMessage.trim();
 
@@ -41,70 +50,76 @@ public class ListMessageEventHandler {
         } else if (rawListMessage.startsWith("synergies")) {
             return fetchAllSynergies();
         } else {
-            return "Invalid !list command";
+            throw new CommandDoesNotExistException("Invalid command provided!");
         }
     }
 
-    private String fetchAllSynergies() {
+    private String fetchAllSynergies() throws EntityDoesNotExistException {
         List<SynergyEntity> synergyEntities = synergyRepository.findAll();
-        StringBuilder allSynergies = new StringBuilder();
 
-        for (int i = 0; i < synergyEntities.size(); i++) {
-            if (i != 0) {
-                allSynergies.append("\n");
-            }
-            allSynergies.append(synergyEntities.get(i).getName());
+        if (synergyEntities.isEmpty()) {
+            throw new EntityDoesNotExistException("No synergies could be found!");
         }
 
-        return allSynergies.toString();
+        StringBuilder returnMessage = new StringBuilder();
+        returnMessage.append("__").append("Synergies").append("__");
+
+        for (SynergyEntity synergyEntity : synergyEntities) {
+            String formattedSynergyName = DiscordMessageHelper
+                .formatName(synergyEntity.getName());
+            returnMessage.append("\n").append(formattedSynergyName);
+        }
+
+        return returnMessage.toString();
     }
 
     private String fetchAllCommands() {
-        StringBuilder allCommands = new StringBuilder();
-
-        allCommands.append("!list [galaxies, components, commands]").append("\n");
-        allCommands.append("!item <item name>").append("\n");
-        allCommands.append("!galaxy <galaxy name>").append("\n");
-        allCommands.append("!synergy <synergy name>").append("\n");
-        allCommands.append("!build [--desc] <item component 1>, <item component 2>, ...").append("\n");
-
-        return allCommands.toString();
+        return "__" + "Commands" + "__" + "\n"
+            + "!champion <champion name>" + "\n"
+            + "!list [galaxies, components, commands, synergies]" + "\n"
+            + "!item <item name>" + "\n"
+            + "!galaxy <galaxy name>" + "\n"
+            + "!synergy <synergy name>" + "\n"
+            + "!build [--desc] <item component 1>, <item component 2>, ..."
+            + "\n";
     }
 
-    private String fetchAllGalaxies() {
+    private String fetchAllGalaxies() throws EntityDoesNotExistException {
         List<GalaxyEntity> galaxiesEntities = galaxiesRepository.findAll();
-        StringBuilder allGalaxies = new StringBuilder();
 
-        for (int i = 0; i < galaxiesEntities.size(); i++) {
-            if (i != 0) {
-                allGalaxies.append("\n");
-            }
-            allGalaxies.append(galaxiesEntities.get(i).getName());
+        if (galaxiesEntities.isEmpty()) {
+            throw new EntityDoesNotExistException("No galaxies could be found!");
         }
 
-        return allGalaxies.toString();
+        StringBuilder returnMessage = new StringBuilder();
+        returnMessage.append("__").append("Galaxies").append("__");
+
+        for (GalaxyEntity galaxiesEntity : galaxiesEntities) {
+            String formattedGalaxyName = DiscordMessageHelper.formatName(galaxiesEntity.getName());
+            returnMessage.append("\n").append(formattedGalaxyName);
+        }
+
+        return returnMessage.toString();
     }
 
-    private String fetchAllComponents() {
+    private String fetchAllComponents() throws EntityDoesNotExistException {
         List<ItemEntity> itemEntities = itemsRepository
             .findByComponentOneIsNullAndComponentTwoIsNull();
 
-        StringBuilder componentsDesc = new StringBuilder();
-
-        if (itemEntities.isEmpty()) {
-            return "No such components exists!";
+        if (itemEntities == null || itemEntities.isEmpty()) {
+            throw new EntityDoesNotExistException("No components could be found!");
         }
 
-        for (int i = 0; i < itemEntities.size(); i++) {
-            if (i != 0) {
-                componentsDesc.append("\n");
-            }
-            ItemEntity itemEntity = itemEntities.get(i);
+        StringBuilder returnMessage = new StringBuilder();
+        returnMessage.append("__").append("Components").append("__");
 
-            componentsDesc.append(itemEntity.getName()).append(": ")
+        for (ItemEntity itemEntity : itemEntities) {
+            String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
+
+            returnMessage.append("\n").append(formattedItemName).append(": ")
                 .append(itemEntity.getDescription());
         }
 
-        return componentsDesc.toString();
+        return returnMessage.toString();
     }
 }

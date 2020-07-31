@@ -1,6 +1,6 @@
 package com.rjdiscbots.tftbot.discord.message;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -9,6 +9,8 @@ import static org.mockito.Mockito.when;
 
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
+import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -32,25 +34,23 @@ public class GalaxyMessageEventHandlerTest {
     }
 
     @Test
-    public void whenMessageIsValidGalaxy_then_returnDescription() {
+    public void whenMessageIsValidGalaxy_then_returnDescription() throws InvalidMessageException {
         List<GalaxyEntity> galaxiesEntities = new ArrayList<>();
         galaxiesEntities.add(new GalaxyEntity("key", "Binary Star", "binary star description"));
         when(galaxiesRepository.findByName("binary star")).thenReturn(galaxiesEntities);
 
-        String galaxyDesc = galaxyMessageEventHandler.handleGalaxyMessage("binary star");
+        String galaxyDesc = galaxyMessageEventHandler.handleGalaxyMessage("!galaxy binary star");
 
         verify(galaxiesRepository, times(1)).findByName("binary star");
-        assertEquals("binary star description", galaxyDesc);
+        assertTrue(galaxyDesc.contains("binary star description"));
     }
 
-    @Test
-    public void whenMessageIsInvalidGalaxy_then_returnNoGalaxyFound() {
+    @Test(expected = EntityDoesNotExistException.class)
+    public void whenMessageIsInvalidGalaxy_then_throwEntityDoesNotExistException()
+        throws InvalidMessageException {
         List<GalaxyEntity> galaxiesEntities = new ArrayList<>();
         when(galaxiesRepository.findByName("binary star")).thenReturn(galaxiesEntities);
 
-        String galaxyDesc = galaxyMessageEventHandler.handleGalaxyMessage("binary star");
-
-        verify(galaxiesRepository, times(1)).findByName("binary star");
-        assertEquals("No such galaxy exists!", galaxyDesc);
+        String galaxyDesc = galaxyMessageEventHandler.handleGalaxyMessage("!galaxy binary star");
     }
 }
