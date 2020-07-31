@@ -1303,34 +1303,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "Passive: Jinx gets excited as she helps take down enemy units!<br><br>After her first takedown, Jinx gains @PercentAttackSpeed@ bonus Attack Speed.<br><br>After her second takedown, Jinx swaps to her rocket launcher, causing her Basic Attacks to deal @ModifiedDamage@ bonus magic damage to all enemies in a small area around her target.",
+                        "desc": "Passive: Jinx gets excited as she helps take down enemy units!After her first takedown, Jinx gains @PercentAttackSpeedBonus@ bonus Attack Speed. After her second takedown, Jinx swaps to her rocket launcher, causing her Basic Attacks to deal @ModifiedRocketDamage@ bonus magic damage to all enemies in a small area around her target.",
                         "icon": "ASSETS/Characters/Jinx/HUD/Icons2D/Jinx_Passive.dds",
                         "name": "Get Excited!",
                         "variables": [
-                            {
-                                "name": "HitWindow",
-                                "value": [
-                                    10.0,
-                                    10.0,
-                                    10.0,
-                                    10.0,
-                                    10.0,
-                                    10.0,
-                                    10.0
-                                ]
-                            },
-                            {
-                                "name": "BuffDuration",
-                                "value": [
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0
-                                ]
-                            },
                             {
                                 "name": "AttackSpeedBonus",
                                 "value": [
@@ -1380,36 +1356,12 @@
                 },
                 {
                     "ability": {
-                        "desc": "Yasuo blinks to the farthest enemy in range, knocks them up for @StunDuration@ seconds, and Attacks them @ModifiedAttacks@ times (applies on-hit effects).",
+                        "desc": "Yasuo blinks to the farthest enemy in range, knocks them up for 1 second, and attacks them @ModifiedAttacks@ times dealing basic attack damage (applies on-hit effects).",
                         "icon": "ASSETS/Characters/Yasuo/HUD/Icons2D/Yasuo_R.dds",
                         "name": "Last Breath",
                         "variables": [
                             {
-                                "name": "StunDuration",
-                                "value": [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            },
-                            {
-                                "name": "Damage",
-                                "value": [
-                                    100.0,
-                                    100.0,
-                                    100.0,
-                                    100.0,
-                                    100.0,
-                                    100.0,
-                                    100.0
-                                ]
-                            },
-                            {
-                                "name": "NumHits",
+                                "name": "Attacks",
                                 "value": [
                                     3.0,
                                     4.0,
@@ -1460,18 +1412,6 @@
                                     0.6000000238418579,
                                     0.6499999761581421
                                 ]
-                            },
-                            {
-                                "name": "SecondsPerRefresh",
-                                "value": [
-                                    0.0,
-                                    9.0,
-                                    9.0,
-                                    9.0,
-                                    9.0,
-                                    9.0,
-                                    9.0
-                                ]
                             }
                         ]
                     },
@@ -1498,7 +1438,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "For @Duration@ seconds Master Yi gains massively increased movement speed, heals for @ModifiedHeal@ of his maximum health each second, and deals @ModifiedDamage@ bonus true damage with his Basic Attacks.",
+                        "desc": "For @Duration@ seconds Master Yi gains massively increased movement speed, heals for @ModifiedHealAmountPercent@ of his maximum health each second, and deals @ModifiedBonusTrueDamage@ bonus true damage with his Basic Attacks.",
                         "icon": "ASSETS/Characters/MasterYi/HUD/Icons2D/MasterYi_W.dds",
                         "name": "Chosen One",
                         "variables": [
@@ -1640,7 +1580,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Ekko shatters the timeline, freezing all units in time before attacking @NumAttacks@ times dealing @ModifiedDamage@ bonus magic damage and applying on-hit effects. Each strike targets the highest attack speed enemy and slows their attack speed by @ASSlow*100@% for @SlowDuration@ seconds.<br><br>Ekko cannot die while he has stopped time.",
+                        "desc": "Ekko shatters the timeline, freezing all units in time before attacking @NumAttacks@ times dealing @ModifiedBonusDamage@ bonus magic damage and applying on-hit effects. Each strike targets the highest attack speed enemy and slows their attack speed by 50% for @SlowDuration@ seconds. Ekko cannot die while he has stopped time.",
                         "icon": "ASSETS/Characters/Ekko/HUD/Icons2D/Ekko_R.dds",
                         "name": "Chronobreak",
                         "variables": [
@@ -1657,18 +1597,6 @@
                                 ]
                             },
                             {
-                                "name": "BaseDelayBetweenAttacks",
-                                "value": [
-                                    0.4000000059604645,
-                                    0.4000000059604645,
-                                    0.30000001192092896,
-                                    0.15000000596046448,
-                                    0.4000000059604645,
-                                    0.4000000059604645,
-                                    0.4000000059604645
-                                ]
-                            },
-                            {
                                 "name": "NumAttacks",
                                 "value": [
                                     5.0,
@@ -1678,18 +1606,6 @@
                                     0.0,
                                     0.0,
                                     0.0
-                                ]
-                            },
-                            {
-                                "name": "ASSlow",
-                                "value": [
-                                    0.0,
-                                    0.5,
-                                    0.5,
-                                    0.5,
-                                    0.5,
-                                    0.5,
-                                    0.5
                                 ]
                             },
                             {
@@ -1729,7 +1645,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Fiora enters a defensive stance for @BlockDuration@ seconds, becoming immune to damage and enemy spell effects. As she exits this stance, she ripostes, dealing @ModifiedDamage@ magic damage to a nearby enemy and stunning them for @StunDuration@ seconds.",
+                        "desc": "Fiora enters a defensive stance for 1.5 seconds, becoming immune to damage and enemy spell effects. As she exits this stance, she ripostes, dealing @ModifiedDamage@ magic damage to a nearby enemy and stunning them for @StunDuration@ seconds.",
                         "icon": "ASSETS/Characters/Fiora/HUD/Icons2D/Fiora_W.dds",
                         "name": "Riposte",
                         "variables": [
@@ -1752,18 +1668,6 @@
                                     1.5,
                                     1.5,
                                     3.0,
-                                    1.5,
-                                    1.5,
-                                    1.5
-                                ]
-                            },
-                            {
-                                "name": "BlockDuration",
-                                "value": [
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
                                     1.5,
                                     1.5,
                                     1.5
@@ -1823,30 +1727,6 @@
                                 ]
                             },
                             {
-                                "name": "MoveSpeed",
-                                "value": [
-                                    1000.0,
-                                    1000.0,
-                                    1000.0,
-                                    1000.0,
-                                    1000.0,
-                                    1000.0,
-                                    1000.0
-                                ]
-                            },
-                            {
-                                "name": "OthersCCDuration",
-                                "value": [
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25
-                                ]
-                            },
-                            {
                                 "name": "SecondaryDamage",
                                 "value": [
                                     0.0,
@@ -1883,7 +1763,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Irelia dashes to her target, Basic Attacking them for @ModifiedPercentAD@ of her Attack Damage. If this kills the target, she Bladesurges again immediately at the enemy with the highest mana. (Total Damage: @TooltipDamage@)",
+                        "desc": "Irelia dashes to her target, Basic Attacking them for @ModifiedPercentADDamage@ of her Attack Damage. If this kills the target, she Bladesurges again immediately at the enemy with the highest mana.",
                         "icon": "ASSETS/Characters/Irelia/HUD/Icons2D/Irelia_Q.dds",
                         "name": "Bladesurge",
                         "variables": [
@@ -1925,7 +1805,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Poppy throws her buckler at the furthest enemy, dealing @ModifiedDamage@ magic damage. The buckler then bounces back, granting Poppy a shield that blocks @ModifiedShield@ damage.",
+                        "desc": "Poppy throws her buckler at the furthest enemy, dealing @ModifiedDamage@ magic damage. The buckler then bounces back, granting Poppy a shield that blocks @ModifiedShieldAmount@ damage.",
                         "icon": "ASSETS/Characters/Poppy/HUD/Icons2D/Poppy_Passive.dds",
                         "name": "Buckler Toss",
                         "variables": [
@@ -1978,7 +1858,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Soraka heals all of her allies for @ModifiedHeal@.",
+                        "desc": "Soraka heals all of her allies for @ModifiedHealAmount@.",
                         "icon": "ASSETS/Characters/Soraka/HUD/Icons2D/Soraka_R.dds",
                         "name": "Wish",
                         "variables": [
@@ -1992,18 +1872,6 @@
                                     1500.0,
                                     1500.0,
                                     1500.0
-                                ]
-                            },
-                            {
-                                "name": "HealTargets",
-                                "value": [
-                                    15.0,
-                                    15.0,
-                                    15.0,
-                                    15.0,
-                                    15.0,
-                                    15.0,
-                                    15.0
                                 ]
                             }
                         ]
@@ -2084,7 +1952,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Syndra pulls in all orbs on the battlefield and creates @Spheres@ new ones, then fires them all at the enemy with the highest current Health percentage, dealing @ModifiedDamage@ magic damage per orb.<br><br><tftitemrules>Lowest total health breaks targeting ties.</tftitemrules>",
+                        "desc": "Syndra pulls in all orbs on the battlefield and creates @Spheres@ new ones, then fires them all at the enemy with the highest current Health percentage, dealing @ModifiedDamage@ magic damage per orb.",
                         "icon": "ASSETS/Characters/Syndra/HUD/Icons2D/SyndraR.dds",
                         "name": "Unleashed Power",
                         "variables": [
@@ -2101,18 +1969,6 @@
                                 ]
                             },
                             {
-                                "name": "CastTime",
-                                "value": [
-                                    0.75,
-                                    0.75,
-                                    0.75,
-                                    0.75,
-                                    0.75,
-                                    0.75,
-                                    0.75
-                                ]
-                            },
-                            {
                                 "name": "Damage",
                                 "value": [
                                     0.0,
@@ -2122,30 +1978,6 @@
                                     200.0,
                                     250.0,
                                     300.0
-                                ]
-                            },
-                            {
-                                "name": "RetargetOnKill",
-                                "value": [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            },
-                            {
-                                "name": "RetargetOverkillAmount",
-                                "value": [
-                                    500.0,
-                                    500.0,
-                                    500.0,
-                                    500.0,
-                                    500.0,
-                                    500.0,
-                                    500.0
                                 ]
                             }
                         ]
@@ -2173,7 +2005,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Neeko leaps into the air and slams into the ground, dealing @ModifiedDamage@ magic damage to all nearby enemies and stunning them for @StunDuration@ seconds.",
+                        "desc": "Neeko leaps into the air and slams into the ground, dealing @ModifiedDamageAmount@ magic damage to all nearby enemies and stunning them for @StunDuration@ seconds.",
                         "icon": "ASSETS/Characters/Neeko/HUD/Icons2D/Neeko_R.dds",
                         "name": "Pop Blossom",
                         "variables": [
@@ -2316,7 +2148,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Darius dunks an enemy, dealing @ModifiedDamage@ magic damage. If this kills the target, Darius immediately casts again.<br><br>Targets below @HealthThreshold@% health take double damage.",
+                        "desc": "Darius dunks an enemy, dealing @ModifiedDamage@ magic damage. If this kills the target, Darius immediately casts again. Targets below 50% health take double damage.",
                         "icon": "ASSETS/Characters/TFT3_Darius/HUD/Icons2D/Darius_Icon_Sudden_Death.TFT_Set3.dds",
                         "name": "Dreadnova Guillotine",
                         "variables": [
@@ -2330,30 +2162,6 @@
                                     1100.0,
                                     1300.0,
                                     1550.0
-                                ]
-                            },
-                            {
-                                "name": "HealthThreshold",
-                                "value": [
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0
-                                ]
-                            },
-                            {
-                                "name": "DamageMultiplier",
-                                "value": [
-                                    2.0,
-                                    2.0,
-                                    2.0,
-                                    2.0,
-                                    2.0,
-                                    2.0,
-                                    2.0
                                 ]
                             }
                         ]
@@ -2434,7 +2242,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Annie blasts a cone of fire dealing @ModifiedDamage@ magic damage to enemies in front of her, then creates a shield with @ModifiedShield@ health for herself for @ShieldDuration@ seconds.",
+                        "desc": "Annie blasts a cone of fire dealing @ModifiedDamage@ magic damage to enemies in front of her, then creates a shield with @ModifiedShieldAmount@ health for herself for 4 seconds.",
                         "icon": "ASSETS/Characters/Annie/HUD/Icons2D/Annie_E.dds",
                         "name": "Galaxy Shield-Blast",
                         "variables": [
@@ -2460,18 +2268,6 @@
                                     700.0,
                                     450.0,
                                     450.0
-                                ]
-                            },
-                            {
-                                "name": "ShieldDuration",
-                                "value": [
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0
                                 ]
                             }
                         ]
@@ -2499,22 +2295,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "Fizz throws a lure that attracts a shark. It deals @ModifiedDamage@ magic damage to enemies caught, knocking them back and stunning them for @StunDuration@ seconds.",
+                        "desc": "Fizz throws a lure that attracts a shark. It deals @ModifiedDamage@ magic damage to enemies caught, knocking them back and stunning them for 1.5 seconds.",
                         "icon": "ASSETS/Characters/Fizz/HUD/Icons2D/Fizz_R.dds",
                         "name": "Chum the Waters",
                         "variables": [
-                            {
-                                "name": "Delay",
-                                "value": [
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5
-                                ]
-                            },
                             {
                                 "name": "Damage",
                                 "value": [
@@ -2525,18 +2309,6 @@
                                     2000.0,
                                     2000.0,
                                     2000.0
-                                ]
-                            },
-                            {
-                                "name": "StunDuration",
-                                "value": [
-                                    1.0,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5
                                 ]
                             }
                         ]
@@ -2564,7 +2336,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Rumble torches his enemies, dealing @ModifiedDamage@ magic damage over @Duration@ seconds, and reducing healing on them by @GrievousWoundsPercent@% for @GrievousWoundsDuration@ seconds.",
+                        "desc": "Rumble torches his enemies, dealing @ModifiedTotalDamage@ magic damage over 3 seconds, and reducing healing on them by 50% for 5 seconds.",
                         "icon": "ASSETS/Characters/Rumble/HUD/Icons2D/Rumble_Flamespitter.dds",
                         "name": "Flamespitter",
                         "variables": [
@@ -2581,54 +2353,6 @@
                                 ]
                             },
                             {
-                                "name": "Duration",
-                                "value": [
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0
-                                ]
-                            },
-                            {
-                                "name": "NumberOfTicks",
-                                "value": [
-                                    12.0,
-                                    12.0,
-                                    12.0,
-                                    12.0,
-                                    12.0,
-                                    12.0,
-                                    12.0
-                                ]
-                            },
-                            {
-                                "name": "TickRate",
-                                "value": [
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25,
-                                    0.25
-                                ]
-                            },
-                            {
-                                "name": "GrievousWoundsDuration",
-                                "value": [
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0
-                                ]
-                            },
-                            {
                                 "name": "ConeHexRange",
                                 "value": [
                                     2.0,
@@ -2638,18 +2362,6 @@
                                     2.0,
                                     2.0,
                                     2.0
-                                ]
-                            },
-                            {
-                                "name": "GrievousWoundsPercent",
-                                "value": [
-                                    0.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0
                                 ]
                             }
                         ]
@@ -2759,7 +2471,7 @@
                                 ]
                             },
                             {
-                                "name": "MagicResist",
+                                "name": "ModifiedMR",
                                 "value": [
                                     0.0,
                                     15.0,
@@ -2795,7 +2507,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Wukong spins, dealing @ModifiedDamage@ magic damage to nearby enemies over @Duration@ seconds. The first time Wukong hits each enemy, he knocks them into the air and stuns them for @StunDuration@ seconds.",
+                        "desc": "Wukong spins, dealing @ModifiedDamage@ magic damage to nearby enemies over 3 seconds. The first time Wukong hits each enemy, he knocks them into the air and stuns them for @StunDuration@ seconds.",
                         "icon": "ASSETS/Characters/MonkeyKing/HUD/Icons2D/MonkeyKingCyclone.dds",
                         "name": "Cyclone",
                         "variables": [
@@ -2809,18 +2521,6 @@
                                     5000.0,
                                     5000.0,
                                     5000.0
-                                ]
-                            },
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0
                                 ]
                             },
                             {
@@ -2872,7 +2572,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Thresh tosses his lantern towards @UnitCount@ random unit(s) on your bench, pulling them into combat and granting them @ModifiedMana@ bonus Mana. Traits are unaffected.",
+                        "desc": "Thresh tosses his lantern towards @UnitCount@ random unit(s) on your bench, pulling them into combat and granting them @ModifiedManaBonus@ bonus Mana. Traits are unaffected.",
                         "icon": "ASSETS/Characters/Thresh/HUD/Icons2D/Thresh_W.dds",
                         "name": "Temporal Passage",
                         "variables": [
@@ -2966,7 +2666,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Twisted Fate throws three cards in a cone that deal @ModifiedDamage@ magic damage to each enemy they pass through.",
+                        "desc": "Twisted Fate throws three cards in a cone that deal @ModifiedBaseDamage@ magic damage to each enemy they pass through.",
                         "icon": "ASSETS/Characters/TwistedFate/HUD/Icons2D/Cardmaster_PowerCard.dds",
                         "name": "Wild Cards",
                         "variables": [
@@ -3007,22 +2707,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "Xin Zhao quickly strikes his target three times, dealing Basic Attack damage and applying on-hit effects. The third strike knocks his target up for @StunDuration@ seconds and deals @ModifiedDamage@ bonus magic damage.",
+                        "desc": "Xin Zhao quickly strikes his target three times, dealing Basic Attack damage and applying on-hit effects. The third strike knocks his target up for 1.5 seconds and deals @ModifiedBonusDamage@ bonus magic damage.",
                         "icon": "ASSETS/Characters/XinZhao/HUD/Icons2D/XinZhaoQ.dds",
                         "name": "Three Talon Strike",
                         "variables": [
-                            {
-                                "name": "StunDuration",
-                                "value": [
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5
-                                ]
-                            },
                             {
                                 "name": "BonusDamage",
                                 "value": [
@@ -3125,24 +2813,12 @@
                 },
                 {
                     "ability": {
-                        "desc": "Xayah creates a storm of feather-blades, gaining @ModifiedAS@ Attack Speed for @Duration@ seconds.",
+                        "desc": "Xayah creates a storm of feather-blades, gaining @ModifiedAS@ Attack Speed for 8 seconds.",
                         "icon": "ASSETS/Characters/Xayah/HUD/Icons2D/XayahW.dds",
                         "name": "Deadly Plumage",
                         "variables": [
                             {
-                                "name": "Duration",
-                                "value": [
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0
-                                ]
-                            },
-                            {
-                                "name": "AttackSpeed",
+                                "name": "ModifiedAS",
                                 "value": [
                                     0.75,
                                     1.0,
@@ -3151,18 +2827,6 @@
                                     1.75,
                                     2.0,
                                     2.25
-                                ]
-                            },
-                            {
-                                "name": "DamageReduction",
-                                "value": [
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0,
-                                    50.0
                                 ]
                             }
                         ]
@@ -3207,7 +2871,7 @@
                                 ]
                             },
                             {
-                                "name": "Radius",
+                                "name": "HexRadius",
                                 "value": [
                                     1.0,
                                     1.0,
@@ -3228,18 +2892,6 @@
                                     3.0,
                                     3.5,
                                     4.0
-                                ]
-                            },
-                            {
-                                "name": "KnockupDuration",
-                                "value": [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
                                 ]
                             }
                         ]
@@ -3320,7 +2972,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Mordekaiser gains a shield for that absorbs @ModifiedShield@ damage over @Duration@ seconds. While the shield persists, Mordekaiser deals @ModifiedDamage@ magic damage per second to all nearby enemies.",
+                        "desc": "Mordekaiser gains a shield for that absorbs @ModifiedShieldAmount@ damage over 8 seconds. While the shield persists, Mordekaiser deals @ModifiedDamagePerSecond@ magic damage per second to all nearby enemies.",
                         "icon": "ASSETS/Characters/Mordekaiser/HUD/Icons2D/MordekaiserW.dds",
                         "name": "Indestructible",
                         "variables": [
@@ -3346,18 +2998,6 @@
                                     1000.0,
                                     1250.0,
                                     1500.0
-                                ]
-                            },
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0,
-                                    8.0
                                 ]
                             }
                         ]
@@ -3385,22 +3025,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "Shaco teleports and backstabs his target for @TooltipPercentage@ of his Basic Attack damage. This is also always a critical hit. (Total: @TooltipADBonus@)",
+                        "desc": "Shaco teleports and backstabs his target for @PercentOfAD@ of his Basic Attack damage. This is also always a critical hit.",
                         "icon": "ASSETS/Characters/Shaco/HUD/Icons2D/Jester_ManiacalCloak2.dds",
                         "name": "Deceive",
                         "variables": [
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5
-                                ]
-                            },
                             {
                                 "name": "PercentOfAD",
                                 "value": [
@@ -3438,22 +3066,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "Jarvan calls down his standard to a nearby location, granting all nearby allies @ModifiedAS@ Attack Speed for @Duration@ seconds.",
+                        "desc": "Jarvan calls down his standard to a nearby location, granting all nearby allies @ModifiedAS@ Attack Speed for 6 seconds.",
                         "icon": "ASSETS/Characters/JarvanIV/HUD/Icons2D/JarvanIV_DemacianStandard.dds",
                         "name": "Ageless Standard",
                         "variables": [
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0
-                                ]
-                            },
                             {
                                 "name": "HexRadius",
                                 "value": [
@@ -3467,7 +3083,7 @@
                                 ]
                             },
                             {
-                                "name": "ASPercent",
+                                "name": "ModifiedAS",
                                 "value": [
                                     0.6499999761581421,
                                     0.5,
@@ -3503,22 +3119,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "At start of combat, Karma bonds to her closest ally.<br><br>Karma grants the bonded ally (or a random one if that ally is dead) a @ModifiedShield@-health shield for @Duration@ seconds. While the shield holds, the ally receives @ModifiedAS@ bonus Attack Speed.",
+                        "desc": "At start of combat, Karma bonds to her closest ally. Karma grants the bonded ally (or a random one if that ally is dead) a @ModifiedShieldAmount@-health shield for 4 seconds. While the shield holds, the ally receives @ModifiedAS@ bonus Attack Speed.",
                         "icon": "ASSETS/Characters/Karma/HUD/Icons2D/Karma_E2.dds",
                         "name": "Inspire",
                         "variables": [
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0
-                                ]
-                            },
                             {
                                 "name": "ShieldAmount",
                                 "value": [
@@ -3532,7 +3136,7 @@
                                 ]
                             },
                             {
-                                "name": "BonusAS",
+                                "name": "ModifiedAS",
                                 "value": [
                                     0.20000000298023224,
                                     0.699999988079071,
@@ -3568,12 +3172,12 @@
                 },
                 {
                     "ability": {
-                        "desc": "Passive: Jhin attacks @AttackSpeed@ times per second, regardless of bonus Attack Speed. Jhin converts each 1% of bonus Attack Speed he has into 0.8 Attack Damage.<br><br>Passive: Every fourth shot, Jhin deals @ModifiedPercent@ damage. (Total: @TooltipDamage@)",
+                        "desc": "Passive: Jhin attacks @AttackSpeed@ times per second, regardless of bonus Attack Speed. Jhin converts each 1% of bonus Attack Speed he has into 0.8 Attack Damage.<br><br>Passive: Every fourth shot, Jhin deals @ModifiedPercent@ damage.",
                         "icon": "ASSETS/Characters/Jhin/HUD/Icons2D/Jhin_P.dds",
                         "name": "Whisper",
                         "variables": [
                             {
-                                "name": "PercentOfAD",
+                                "name": "ModifiedPercent",
                                 "value": [
                                     0.0,
                                     3.440000057220459,
@@ -3621,7 +3225,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Zoe kicks a bubble at the enemy with the the highest current Health percentage, stunning them for @StunDuration@ seconds and dealing @ModifiedDamage@ magic damage.<br><br><tftitemrules>Highest total health breaks targeting ties.</tftitemrules>",
+                        "desc": "Zoe kicks a bubble at the enemy with the the highest current Health percentage, stunning them for @StunDuration@ seconds and dealing @ModifiedDamage@ magic damage. Highest total health breaks targeting ties.",
                         "icon": "ASSETS/Characters/Zoe/HUD/Icons2D/Zoe_E.dds",
                         "name": "Sleepy Trouble Bubble",
                         "variables": [
@@ -3674,7 +3278,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Blitzcrank pulls the farthest enemy, dealing @ModifiedDamage@ magic damage and stunning them for @StunDuration@ seconds.<br><br>His next attack after pulling knocks up for 1 second.<br><br>Allies within range will prefer to attack Blitzcrank's target.",
+                        "desc": "Blitzcrank pulls the farthest enemy, dealing @ModifiedDamage@ magic damage and stunning them for 2.5 seconds. His next attack after pulling knocks up for 1 second. Allies within range will prefer to attack Blitzcrank's target.",
                         "icon": "ASSETS/Characters/Blitzcrank/HUD/Icons2D/Blitzcrank_RocketGrab.dds",
                         "name": "Rocket Grab",
                         "variables": [
@@ -3688,18 +3292,6 @@
                                     950.0,
                                     1200.0,
                                     1450.0
-                                ]
-                            },
-                            {
-                                "name": "StunDuration",
-                                "value": [
-                                    2.5,
-                                    2.5,
-                                    2.5,
-                                    2.5,
-                                    2.5,
-                                    2.5,
-                                    2.5
                                 ]
                             }
                         ]
@@ -3727,7 +3319,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Leona creates a barrier, reducing all incoming damage by @ModifiedDamageReduction@ for 4 seconds.<br><br>",
+                        "desc": "Leona creates a barrier, reducing all incoming damage by @ModifiedFlatDamageReduction@ for 4 seconds.",
                         "icon": "ASSETS/Characters/Leona/HUD/Icons2D/LeonaSolarBarrier.dds",
                         "name": "Cyber Barrier",
                         "variables": [
@@ -3741,18 +3333,6 @@
                                     160.0,
                                     200.0,
                                     240.0
-                                ]
-                            },
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0
                                 ]
                             }
                         ]
@@ -3785,19 +3365,7 @@
                         "name": "Relentless Pursuit",
                         "variables": [
                             {
-                                "name": "FirstShotRatio",
-                                "value": [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            },
-                            {
-                                "name": "SecondShotDamage",
+                                "name": "ModifiedDamage",
                                 "value": [
                                     0.0,
                                     200.0,
@@ -3848,30 +3416,6 @@
                                     200.0,
                                     200.0
                                 ]
-                            },
-                            {
-                                "name": "BoxWidth",
-                                "value": [
-                                    160.0,
-                                    160.0,
-                                    160.0,
-                                    160.0,
-                                    160.0,
-                                    160.0,
-                                    160.0
-                                ]
-                            },
-                            {
-                                "name": "Range",
-                                "value": [
-                                    700.0,
-                                    700.0,
-                                    700.0,
-                                    700.0,
-                                    700.0,
-                                    700.0,
-                                    700.0
-                                ]
                             }
                         ]
                     },
@@ -3910,10 +3454,6 @@
                                     1500.0,
                                     1500.0
                                 ]
-                            },
-                            {
-                                "name": "AOEDamage",
-                                "value": null
                             }
                         ]
                     },
@@ -3937,7 +3477,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Passive: The Super-Mech's attacks cleave the area in front of it.<br><br>The Super-Mech calls down a devastating blast at its target's location, dealing @ModifiedMainDamage@ magic damage to its target and @ModifiedSplashDamage@ magic damage to all other nearby enemies.<br><br>This spell's damage increases with the Star Level of the Super-Mech's Pilots.",
+                        "desc": "Passive: The Super-Mech's attacks cleave the area in front of it. The Super-Mech calls down a devastating blast at its target's location, dealing @ModifiedMainDamage@ magic damage to its target and @ModifiedSplashDamage@ magic damage to all other nearby enemies. This spell's damage increases with the Star Level of the Super-Mech's Pilots.",
                         "icon": "ASSETS/Characters/TFT3_SuperMech/HUD/Icons2D/TFT3_SuperMech_R.TFT_Set3.dds",
                         "name": "Mecha Justice",
                         "variables": [
@@ -4040,12 +3580,12 @@
                 },
                 {
                     "ability": {
-                        "desc": "Xerath transforms, summoning meteors to strike random foes in place of his normal attacks for @Duration@ seconds. Meteors deal @ModifiedDamage@ magic damage upon impact and if they kill their target, all adjacent enemies take @ModifiedAoEDamage@ magic damage and are stunned for @StunDuration@ seconds.",
+                        "desc": "Xerath transforms, summoning meteors to strike random foes in place of his normal attacks for @Durations@ seconds. Meteors deal @ModifiedDamage@ magic damage upon impact and if they kill their target, all adjacent enemies take @ModifiedAoEDamage@ magic damage and are stunned for 1.5 seconds.",
                         "icon": "ASSETS/Characters/TFT3_Xerath/HUD/Icons2D/TFT3_Xerath_Ult.TFT3_Set3_Xerath.dds",
                         "name": "Abyssal Bombardment",
                         "variables": [
                             {
-                                "name": "BaseDamage",
+                                "name": "ModifiedDamage",
                                 "value": [
                                     350.0,
                                     300.0,
@@ -4069,19 +3609,7 @@
                                 ]
                             },
                             {
-                                "name": "StunDuration",
-                                "value": [
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5
-                                ]
-                            },
-                            {
-                                "name": "Duration",
+                                "name": "Durations",
                                 "value": [
                                     6.0,
                                     6.0,
@@ -4117,7 +3645,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Gnar leaps towards his target and transforms into Mega Gnar, throwing nearby enemies, dealing @ModifiedDamage@ magic damage and stunning them for @RCCDuration@ seconds.<br><br>While in Mega Gnar form, Gnar is melee and gains @TransformHealth@ Health and @TransformAD@ Attack Damage.",
+                        "desc": "Gnar leaps towards his target and transforms into Mega Gnar, throwing nearby enemies, dealing @ModifiedDamage@ magic damage and stunning them for 1.5 seconds. While in Mega Gnar form, Gnar is melee and gains @TransformHealth@ Health and @TransformAD@ Attack Damage.",
                         "icon": "ASSETS/Characters/Gnar/HUD/Icons2D/GnarTransform.dds",
                         "name": "GNAR!",
                         "variables": [
@@ -4131,42 +3659,6 @@
                                     500.0,
                                     600.0,
                                     700.0
-                                ]
-                            },
-                            {
-                                "name": "RCCDuration",
-                                "value": [
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5,
-                                    1.5
-                                ]
-                            },
-                            {
-                                "name": "RKnockbackDistance",
-                                "value": [
-                                    600.0,
-                                    600.0,
-                                    600.0,
-                                    600.0,
-                                    600.0,
-                                    600.0,
-                                    600.0
-                                ]
-                            },
-                            {
-                                "name": "TransformDuration",
-                                "value": [
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0,
-                                    60.0
                                 ]
                             },
                             {
@@ -4218,7 +3710,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Teemo scatters 3 traps around the nearest enemy. When an enemy nears a trap (or after @DetonationDelay@ seconds), it explodes on nearby enemies dealing @ModifiedDamage@ magic damage, knocking them down, and slowing them for @SlowDuration@ seconds.",
+                        "desc": "Teemo scatters 3 traps around the nearest enemy. When an enemy nears a trap (or after @DetonationDelay@ seconds), it explodes on nearby enemies dealing @ModifiedDamage@ magic damage, knocking them down, and slowing them for 3.0 seconds.",
                         "icon": "ASSETS/Characters/Teemo/HUD/Icons2D/Teemo_R.dds",
                         "name": "Satellite Traps",
                         "variables": [
@@ -4232,18 +3724,6 @@
                                     0.0,
                                     0.0,
                                     0.0
-                                ]
-                            },
-                            {
-                                "name": "SlowDuration",
-                                "value": [
-                                    0.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0
                                 ]
                             },
                             {
@@ -4336,7 +3816,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Illaoi slams a tentacle in a line in front of her, dealing @ModifiedDamage@ damage and stealing @ResistStealPercent@% Armor and Magic Resist from each target hit for @Duration@ seconds.",
+                        "desc": "Illaoi slams a tentacle in a line in front of her, dealing @ModifiedDamage@ damage and stealing @ResistStealPercent@% Armor and Magic Resist from each target hit for 6 seconds.",
                         "icon": "ASSETS/Characters/Illaoi/HUD/Icons2D/Illaoi_Q.dds",
                         "name": "Tentacle Smash",
                         "variables": [
@@ -4350,18 +3830,6 @@
                                     0.0,
                                     0.0,
                                     0.0
-                                ]
-                            },
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    0.0,
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0,
-                                    6.0
                                 ]
                             },
                             {
@@ -4507,22 +3975,10 @@
                 },
                 {
                     "ability": {
-                        "desc": "For @Duration@ seconds, Kog'Maw gains infinite Attack Range, @PercentAttackSpeed@% Attack Speed, and his attacks deal @ModifiedPercentMaxHPDamage@% of the target's maximum Health as bonus magic damage.",
+                        "desc": "For 3 seconds, Kog'Maw gains infinite Attack Range, @PercentAttackSpeed@% Attack Speed, and his attacks deal @ModifiedPercentMaxHPDamage@% of the target's maximum Health as bonus magic damage.",
                         "icon": "ASSETS/Characters/KogMaw/HUD/Icons2D/KogMaw_BioArcaneBarrage.dds",
                         "name": "Barrage",
                         "variables": [
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0,
-                                    3.0
-                                ]
-                            },
                             {
                                 "name": "PercentAttackSpeed",
                                 "value": [
@@ -4625,7 +4081,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Cassiopeia launches poison at the nearest unpoisoned enemy, dealing @ModifiedDamage@ magic damage over @Duration@ seconds, and reducing the effectiveness of new shields by @ShieldReductionPercent@%.",
+                        "desc": "Cassiopeia launches poison at the nearest unpoisoned enemy, dealing @ModifiedDamage@ magic damage over 14 seconds, and reducing the effectiveness of new shields by @ShieldReductionPercent@%.",
                         "icon": "ASSETS/Characters/Cassiopeia/HUD/Icons2D/Cassiopeia_Q.dds",
                         "name": "Noxious Blast",
                         "variables": [
@@ -4639,18 +4095,6 @@
                                     0.0,
                                     0.0,
                                     0.0
-                                ]
-                            },
-                            {
-                                "name": "Duration",
-                                "value": [
-                                    0.0,
-                                    14.0,
-                                    14.0,
-                                    14.0,
-                                    14.0,
-                                    14.0,
-                                    14.0
                                 ]
                             },
                             {
@@ -4743,7 +4187,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Janna summons five tornados which fly forward in a large cone. Tornados passing through allies grant @ModifiedPercentAttackSpeed@% Attack Speed for @BuffDuration@ seconds, while knocking up and stunning enemies for @StunDuration@ seconds.",
+                        "desc": "Janna summons five tornados which fly forward in a large cone. Tornados passing through allies grant @ModifiedPercentAttackSpeed@% Attack Speed for 5 seconds, while knocking up and stunning enemies for 1.5 seconds.",
                         "icon": "ASSETS/Characters/Janna/HUD/Icons2D/Janna_HowlingGale.dds",
                         "name": "Howling Gale",
                         "variables": [
@@ -4754,30 +4198,6 @@
                                     80.0,
                                     125.0,
                                     500.0,
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ]
-                            },
-                            {
-                                "name": "BuffDuration",
-                                "value": [
-                                    0.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ]
-                            },
-                            {
-                                "name": "StunDuration",
-                                "value": [
-                                    0.0,
-                                    1.5,
-                                    1.5,
-                                    1.5,
                                     0.0,
                                     0.0,
                                     0.0
@@ -4808,7 +4228,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Riven dashes and shields herself for @ModifiedShield@, then slashes forward dealing @ModifiedDamage@ magic damage to nearby enemies. <br><br>Every third cast, Riven leaps into the air and launches forward a large wave of energy that deals @ModifiedDamageFinal@ magic damage.",
+                        "desc": "Riven dashes and shields herself for @ModifiedShield@, then slashes forward dealing @ModifiedDamage@ magic damage to nearby enemies. Every third cast, Riven leaps into the air and launches forward a large wave of energy that deals @ModifiedDamageFinal@ magic damage.",
                         "icon": "ASSETS/Characters/Riven/HUD/Icons2D/RivenWindScar.dds",
                         "name": "Energy Slash",
                         "variables": [
@@ -4859,18 +4279,6 @@
                                     0.0,
                                     0.0
                                 ]
-                            },
-                            {
-                                "name": "ShieldDuration",
-                                "value": [
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0,
-                                    4.0
-                                ]
                             }
                         ]
                     },
@@ -4897,7 +4305,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Bard spawns a meep on his owner's bench which can be sold for 1 XP.<br><br>Passive: Bard gains an additional @ModifiedManaPerAttack@ mana each attack, but cannot gain mana in rounds with no enemy champions.",
+                        "desc": "Bard spawns a meep on his owner's bench which can be sold for 1 XP. Passive: Bard gains an additional @ModifiedManaPerAttack@ mana each attack, but cannot gain mana in rounds with no enemy champions.",
                         "icon": "ASSETS/Characters/Bard/HUD/Icons2D/Bard_Meeps.dds",
                         "name": "Traveler's Call",
                         "variables": [
@@ -4976,7 +4384,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Passive: Every third attack, Zed deals @ModifiedDamage@ bonus magic damage and steals @ADSteal*100@% of the target's current Attack Damage.",
+                        "desc": "Passive: Every third attack, Zed deals @ModifiedDamage@ bonus magic damage and steals @ADSteal@% of the target's current Attack Damage.",
                         "icon": "ASSETS/Characters/TFT3_Zed/HUD/Icons2D/TFT3_ZedP.TFT_Set3_Act2.dds",
                         "name": "Contempt For The Weak",
                         "variables": [
