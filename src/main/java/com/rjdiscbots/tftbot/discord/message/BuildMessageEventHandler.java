@@ -9,9 +9,12 @@ import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,7 +27,9 @@ public class BuildMessageEventHandler {
         this.itemsRepository = itemsRepository;
     }
 
-    public String handleBuildMessage(String rawBuildMessage) throws InvalidMessageException {
+    public void handleEmbedBuildMessage(@NonNull String rawBuildMessage,
+        @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
+        throws InvalidMessageException {
         if (!rawBuildMessage.startsWith("!build ")) {
             throw new IllegalArgumentException(
                 "Message does begin with !build: " + rawBuildMessage);
@@ -39,10 +44,14 @@ public class BuildMessageEventHandler {
             addDesc = true;
         }
 
-        return fetchItemBuilds(rawBuildMessage, addDesc);
+        fetchItemBuilds(rawBuildMessage, addDesc, embedBuilder);
+
+        String picUrl = "pengu.png";
+        filePathMap.put(picUrl, "patch/" + picUrl);
+        embedBuilder.setThumbnail("attachment://" + picUrl);
     }
 
-    private String fetchItemBuilds(String components, boolean addDesc)
+    private void fetchItemBuilds(String components, boolean addDesc, EmbedBuilder embedBuilder)
         throws EntityDoesNotExistException, NoArgumentProvidedException {
         List<String> componentsList = Arrays.stream(components.split("[,]")).map(String::trim)
             .collect(Collectors.toList());
@@ -57,23 +66,26 @@ public class BuildMessageEventHandler {
             throw new EntityDoesNotExistException("Invalid components provided!");
         }
 
-        StringBuilder returnMessage = new StringBuilder();
+        embedBuilder.setTitle("Build Recipes");
+        embedBuilder.setDescription("All possible items made from the given components.");
+
+        StringBuilder desc = new StringBuilder();
 
         for (ItemEntity itemEntity : fullItems) {
             String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
-            returnMessage.append("__").append(formattedItemName).append("__").append("\n");
             if (addDesc) {
-                returnMessage.append(itemEntity.getDescription());
+                desc.append(itemEntity.getDescription());
             }
             String componentOneName = DiscordMessageHelper
                 .formatName(itemEntity.getComponentOneName());
             String componentTwoName = DiscordMessageHelper
                 .formatName(itemEntity.getComponentTwoName());
 
-            returnMessage.append(" (").append(componentOneName).append(", ")
-                .append(componentTwoName).append(")").append("\n");
+            desc.append(" (").append(componentOneName).append(", ")
+                .append(componentTwoName).append(")");
+            embedBuilder.addField(formattedItemName, desc.toString(), false);
+            desc.setLength(0);
         }
-        return returnMessage.toString();
     }
 
     private Set<ItemEntity> fetchItems(List<String> components) {

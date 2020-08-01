@@ -66,7 +66,7 @@ public class DiscordMessageHelper {
         jsonNode = objectMapper.readTree(jsonAbility);
 
         String abilityName = jsonNode.get("name").asText();
-        stringBuilder.append(abilityName).append(": \n");
+        stringBuilder.append("**").append(abilityName).append("**").append(": ");
 
         String abilityDesc = jsonNode.get("desc").asText();
         String[] variableTags = StringUtils.substringsBetween(abilityDesc, "@", "@");

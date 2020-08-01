@@ -10,8 +10,11 @@ import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,7 +31,8 @@ public class SynergyMessageEventHandler {
         this.championsRepository = championsRepository;
     }
 
-    public String handleSynergyMessage(String rawSynergyMessage)
+    public void handleEmbedSynergyMessage(@NonNull String rawSynergyMessage,
+        @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawSynergyMessage.startsWith("!synergy ")) {
             throw new IllegalArgumentException(
@@ -38,43 +42,30 @@ public class SynergyMessageEventHandler {
         String synergyName = rawSynergyMessage.replaceFirst("!synergy ", "");
         synergyName = synergyName.trim();
 
-        StringBuilder returnMessage = new StringBuilder();
-
-        String synergyMessage = fetchSynergy(synergyName);
-        String championsBySynergyMessage = fetchChampionsBySynergy(synergyName);
-
-        returnMessage.append(synergyMessage).append("\n").append(championsBySynergyMessage);
-
-        return returnMessage.toString();
+        fetchSynergy(synergyName, embedBuilder, filePathMap);
+        fetchChampionsBySynergy(synergyName, embedBuilder);
     }
 
-    public String fetchSynergy(String synergyName) throws EntityDoesNotExistException {
-        List<SynergyEntity> synergyList = synergyRepository.findByName(synergyName);
+    private void fetchSynergy(String synergyName, EmbedBuilder embedBuilder,
+        Map<String, String> filePathMap) throws InvalidMessageException {
+        SynergyEntity synergy = synergyRepository.findOneByName(synergyName);
 
-        if (synergyList.isEmpty()) {
+        if (synergy == null) {
             throw new EntityDoesNotExistException("Invalid synergy provided!");
         }
 
-        StringBuilder synergyMessage = new StringBuilder();
-
-        SynergyEntity synergy = synergyList.get(0);
-
         String formattedSynergyName = DiscordMessageHelper.formatName(synergyName);
 
-        synergyMessage.append("__").append(formattedSynergyName).append("__").append("\n");
-        synergyMessage.append("Description: ").append(synergy.getDescription()).append("\n");
+        String picUrl = synergyName.replaceAll(" ", "").toLowerCase() + ".png";
+        filePathMap.put(picUrl, "patch/traits/" + picUrl);
 
-        if (synergy.getInnate() != null) {
-            synergyMessage.append("Innate Ability: ").append(synergy.getInnate()).append("\n");
-        }
-
+        StringBuilder medal = new StringBuilder();
         if (synergy.getSetModel() != null) {
-            synergyMessage.append("Medals: ");
             List<SetModel> model = synergy.getSetModel();
             for (int i = 0; i < model.size(); i++) {
                 SetModel setModel = model.get(i);
                 if (i != 0) {
-                    synergyMessage.append(", ");
+                    medal.append(", ");
                 }
 
                 String style = setModel.getStyle();
@@ -82,22 +73,29 @@ public class SynergyMessageEventHandler {
                 Integer min = setModel.getMin();
                 Integer max = setModel.getMax();
 
-                synergyMessage.append(style).append(" (");
+                medal.append(style).append(" (");
 
                 if (min != null && max != null) {
-                    synergyMessage.append(min).append("-").append(max).append(")");
+                    medal.append(min).append("-").append(max).append(")");
                 } else if (min != null) {
-                    synergyMessage.append(min).append(")");
+                    medal.append(min).append(")");
                 } else if (max != null) {
-                    synergyMessage.append(max).append(")");
+                    medal.append(max).append(")");
                 }
             }
         }
 
-        return synergyMessage.toString();
+        embedBuilder.setTitle(formattedSynergyName);
+        embedBuilder.setDescription(synergy.getDescription());
+        embedBuilder.setThumbnail("attachment://" + picUrl);
+        if (synergy.getInnate() != null && !synergy.getInnate().isEmpty()) {
+            embedBuilder.addField("Innate Ability", synergy.getInnate(), false);
+        }
+        embedBuilder.addField("Medals", medal.toString(), false);
     }
 
-    public String fetchChampionsBySynergy(String synergyName) throws EntityDoesNotExistException {
+    private void fetchChampionsBySynergy(String synergyName, EmbedBuilder embedBuilder)
+        throws EntityDoesNotExistException {
         List<ChampionsEntity> championsEntityList = championsRepository
             .findByTrait(synergyName);
 
@@ -105,25 +103,24 @@ public class SynergyMessageEventHandler {
             throw new EntityDoesNotExistException("Invalid synergy provided!");
         }
 
-        StringBuilder championsBySynergyMessage = new StringBuilder();
+        StringBuilder championInSynergy = new StringBuilder();
 
         championsEntityList = championsEntityList.stream()
             .sorted((Comparator.comparingInt(ChampionsEntity::getCost)))
             .collect(Collectors.toList());
 
-        championsBySynergyMessage.append("Champions: ");
         for (int i = 0; i < championsEntityList.size(); i++) {
             ChampionsEntity championsEntity = championsEntityList.get(i);
             if (i != 0) {
-                championsBySynergyMessage.append(", ");
+                championInSynergy.append(", ");
             }
 
             String formattedChampionName = DiscordMessageHelper
                 .formatName(championsEntity.getName());
-            championsBySynergyMessage.append(formattedChampionName).append(" (")
+            championInSynergy.append(formattedChampionName).append(" (")
                 .append(championsEntity.getCost()).append(")");
         }
 
-        return championsBySynergyMessage.toString();
+        embedBuilder.addField("Champions", championInSynergy.toString(), false);
     }
 }

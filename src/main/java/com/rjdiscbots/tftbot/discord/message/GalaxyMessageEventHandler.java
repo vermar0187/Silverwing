@@ -6,7 +6,10 @@ import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
+import java.util.Map;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,7 +22,9 @@ public class GalaxyMessageEventHandler {
         this.galaxiesRepository = galaxiesRepository;
     }
 
-    public String handleGalaxyMessage(String rawGalaxyMessage) throws InvalidMessageException {
+    public void handleEmbedGalaxyMessage(@NonNull String rawGalaxyMessage,
+        @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
+        throws InvalidMessageException {
         if (!rawGalaxyMessage.startsWith("!galaxy ")) {
             throw new IllegalArgumentException(
                 "Message does begin with !galaxy: " + rawGalaxyMessage);
@@ -28,24 +33,24 @@ public class GalaxyMessageEventHandler {
         rawGalaxyMessage = rawGalaxyMessage.replaceFirst("!galaxy ", "");
         rawGalaxyMessage = rawGalaxyMessage.trim();
 
-        return fetchGalaxyDescription(rawGalaxyMessage);
+        fetchGalaxyDescription(rawGalaxyMessage, embedBuilder, filePathMap);
     }
 
-    private String fetchGalaxyDescription(String galaxyName) throws EntityDoesNotExistException {
-        List<GalaxyEntity> galaxyEntity = galaxiesRepository.findByName(galaxyName);
+    private void fetchGalaxyDescription(String galaxyName, EmbedBuilder embedBuilder,
+        Map<String, String> filePathMap) throws EntityDoesNotExistException {
+        GalaxyEntity galaxy = galaxiesRepository.findOneByName(galaxyName);
 
-        if (galaxyEntity == null || galaxyEntity.isEmpty()) {
-            throw new EntityDoesNotExistException("Invalid galaxy provided!");
+        if (galaxy == null) {
+            throw new EntityDoesNotExistException("Invalid galaxy provided");
         }
 
-        StringBuilder returnMessage = new StringBuilder();
-
-        GalaxyEntity galaxy = galaxyEntity.get(0);
-
         String formattedGalaxyName = DiscordMessageHelper.formatName(galaxy.getName());
-        returnMessage.append("__").append(formattedGalaxyName).append("__").append("\n");
-        returnMessage.append(galaxy.getDescripiton());
 
-        return returnMessage.toString();
+        String picUrl = galaxy.getKey() + ".png";
+        filePathMap.put(picUrl, "patch/galaxies/" + picUrl);
+
+        embedBuilder.setTitle(formattedGalaxyName);
+        embedBuilder.setDescription(galaxy.getDescripiton());
+        embedBuilder.setThumbnail("attachment://" + picUrl);
     }
 }

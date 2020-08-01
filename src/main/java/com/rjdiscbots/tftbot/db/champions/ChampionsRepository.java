@@ -12,5 +12,5 @@ public interface ChampionsRepository extends JpaRepository<ChampionsEntity, Long
     @Query(value = "select * from champions WHERE :trait = ANY(traits)", nativeQuery = true)
     List<ChampionsEntity> findByTrait(@Param("trait") String trait);
 
-    List<ChampionsEntity> findByName(String championName);
+    ChampionsEntity findOneByName(String championName);
 }

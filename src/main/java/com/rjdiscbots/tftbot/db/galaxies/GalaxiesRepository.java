@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GalaxiesRepository extends JpaRepository<GalaxyEntity, Long> {
 
-    List<GalaxyEntity> findByName(String name);
+    GalaxyEntity findOneByName(String name);
 }

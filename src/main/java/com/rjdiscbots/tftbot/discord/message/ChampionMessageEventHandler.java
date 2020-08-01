@@ -9,7 +9,10 @@ import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
+import java.util.Map;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,7 +29,9 @@ public class ChampionMessageEventHandler {
         this.championStatsRepository = championStatsRepository;
     }
 
-    public String handleChampionMessage(String rawChampionMessage) throws InvalidMessageException {
+    public void handleEmbedChampionMessage(@NonNull String rawChampionMessage,
+        @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
+        throws InvalidMessageException {
         if (!rawChampionMessage.startsWith("!champion ")) {
             throw new IllegalArgumentException(
                 "Message does begin with !champion: " + rawChampionMessage);
@@ -35,75 +40,71 @@ public class ChampionMessageEventHandler {
         String championMessage = rawChampionMessage.replaceFirst("!champion ", "");
         championMessage = championMessage.trim();
 
-        StringBuilder returnMessage = new StringBuilder();
-
-        String championInfo = fetchChampion(championMessage);
-        String championStatsInfo = fetchChampionStats(championMessage);
-
-        returnMessage.append(championInfo).append("\n\n").append(championStatsInfo);
-
-        return returnMessage.toString();
+        fetchChampion(championMessage, embedBuilder, filePathMap);
+        fetchChampionStats(championMessage, embedBuilder);
     }
 
-    private String fetchChampion(String championName) throws EntityDoesNotExistException {
-        List<ChampionsEntity> champions = championsRepository.findByName(championName);
+    private void fetchChampion(String championName, EmbedBuilder embedBuilder,
+        Map<String, String> filePathMap) throws EntityDoesNotExistException {
 
-        if (champions == null || champions.isEmpty()) {
+        ChampionsEntity champion = championsRepository.findOneByName(championName);
+
+        if (champion == null) {
             throw new EntityDoesNotExistException("Invalid champion provided!");
         }
 
-        ChampionsEntity champion = champions.get(0);
+        String formattedChampionName = DiscordMessageHelper.formatName(championName);
 
-        championName = DiscordMessageHelper.formatName(champion.getName());
-
-        StringBuilder championMessage = new StringBuilder();
-
-        championMessage.append("__").append(championName).append("__").append("\n");
-        championMessage.append("Cost: ").append(champion.getCost()).append("\n");
-        championMessage.append("Traits: ");
-        List<String> traits = champion.getTraits();
-        for (int i = 0; i < traits.size(); i++) {
-            String trait = DiscordMessageHelper.formatName(traits.get(i));
+        String traits = "";
+        List<String> traitList = champion.getTraits();
+        for (int i = 0; i < traitList.size(); i++) {
+            String trait = DiscordMessageHelper.formatName(traitList.get(i));
             if (i != 0) {
-                championMessage.append(", ");
+                traits = traits.concat(", ");
             }
-            championMessage.append(trait);
+            traits = traits.concat(trait);
         }
 
-        championMessage.append("\n\n");
-
+        String ability = "";
         try {
-            championMessage.append(DiscordMessageHelper.formatAbility(champion.getAbility()));
+            ability = DiscordMessageHelper.formatAbility(champion.getAbility());
         } catch (JsonProcessingException e) {
             System.out.println("Unable to parse ability");
+            ability = "Not found";
         }
 
-        return championMessage.toString();
+        String picUrl = championName.replaceAll(" ", "").toLowerCase() + ".png";
+        filePathMap.put(picUrl, "patch/champions/" + picUrl);
+
+        embedBuilder.setTitle(formattedChampionName);
+        embedBuilder.setThumbnail("attachment://" + picUrl);
+        embedBuilder.setDescription(ability);
+        embedBuilder.addField("Cost", String.valueOf(champion.getCost()), true);
+        embedBuilder.addField("Traits", traits, true);
     }
 
-    private String fetchChampionStats(String championName) throws EntityDoesNotExistException {
-        List<ChampionStatsEntity> championStats = championStatsRepository
-            .findByChampionOrderByStarsAsc(championName);
+    private void fetchChampionStats(String championName, EmbedBuilder embedBuilder)
+        throws EntityDoesNotExistException {
+        ChampionStatsEntity championStats = championStatsRepository
+            .findOneByChampionOrderByStarsAsc(championName);
 
-        if (championStats == null || championStats.isEmpty()) {
-            throw new EntityDoesNotExistException("Invalid champion provided!");
+        if (championStats == null) {
+            throw new EntityDoesNotExistException("Invalid champion provided");
         }
 
-        StringBuilder championStatsMessage = new StringBuilder();
+        embedBuilder.addField("DPS", String.valueOf(championStats.getDps()), true);
+        embedBuilder.addField("Damage", String.valueOf(championStats.getDamage()), true);
 
-        ChampionStatsEntity championStatsEntity = championStats.get(0);
-        championStatsMessage.append("DPS: ").append(championStatsEntity.getDps()).append("\n");
-        championStatsMessage.append("Damage: ").append(championStatsEntity.getDamage())
-            .append("\n");
-        Double attackSpeed = DiscordMessageHelper
-            .formatDouble(championStatsEntity.getAttackSpeed());
-        championStatsMessage.append("Attack Speed: ").append(attackSpeed).append("\n");
-        championStatsMessage.append("Range: ").append(championStatsEntity.getRange()).append("\n");
-        championStatsMessage.append("Mana Total: ").append(championStatsEntity.getInitialMana())
-            .append("/").append(championStatsEntity.getMana()).append("\n");
-        championStatsMessage.append("Armor: ").append(championStatsEntity.getArmor()).append("\n");
-        championStatsMessage.append("Magic Resist: ").append(championStatsEntity.getMr());
+        Double attackSpeed = DiscordMessageHelper.formatDouble(championStats.getAttackSpeed());
+        embedBuilder.addField("Attack Speed", String.valueOf(attackSpeed), true);
 
-        return championStatsMessage.toString();
+        embedBuilder.addField("Range", String.valueOf(championStats.getRange()), true);
+
+        String mana = String.valueOf(championStats.getInitialMana()).concat("/")
+            .concat(String.valueOf(championStats.getMana()));
+        embedBuilder.addField("Mana Total", mana, true);
+
+        embedBuilder.addField("Armor", String.valueOf(championStats.getArmor()), true);
+        embedBuilder.addField("Magic Resist", String.valueOf(championStats.getMr()), true);
     }
 }

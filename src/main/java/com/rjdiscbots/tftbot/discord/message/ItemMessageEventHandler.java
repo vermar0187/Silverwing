@@ -3,9 +3,12 @@ package com.rjdiscbots.tftbot.discord.message;
 import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
-import java.util.List;
+import java.util.Map;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +21,9 @@ public class ItemMessageEventHandler {
         this.itemsRepository = itemsRepository;
     }
 
-    public String handleItemMessage(String rawItemMessage) throws EntityDoesNotExistException {
+    public void handleEmbedItemMessage(@NonNull String rawItemMessage,
+        @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
+        throws InvalidMessageException {
         if (!rawItemMessage.startsWith("!item ")) {
             throw new IllegalArgumentException(
                 "Message does begin with !item: " + rawItemMessage);
@@ -27,34 +32,44 @@ public class ItemMessageEventHandler {
         rawItemMessage = rawItemMessage.replaceFirst("!item ", "");
         rawItemMessage = rawItemMessage.trim();
 
-        return fetchItemDescription(rawItemMessage);
+        fetchItemDescription(rawItemMessage, embedBuilder, filePathMap);
     }
 
-    private String fetchItemDescription(String item) throws EntityDoesNotExistException {
-        List<ItemEntity> itemEntities = itemsRepository.findByName(item);
+    private void fetchItemDescription(String item, EmbedBuilder embedBuilder,
+        Map<String, String> filePathMap) throws EntityDoesNotExistException {
+        ItemEntity itemEntity = itemsRepository.findOneByName(item);
 
-        if (itemEntities == null || itemEntities.isEmpty()) {
+        if (itemEntity == null) {
             throw new EntityDoesNotExistException("Invalid item provided!");
         }
 
-        StringBuilder returnMessage = new StringBuilder();
-
-        ItemEntity itemEntity = itemEntities.get(0);
         String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
 
-        returnMessage.append("__").append(formattedItemName).append("__").append("\n");
-        returnMessage.append(itemEntity.getDescription());
+        int itemId = itemEntity.getId();
+        String picId = itemId > 9 ? "" + itemId : "0" + itemId;
+        String picUrl = picId + ".png";
+
+        filePathMap.put(picUrl, "patch/items/" + picUrl);
+
+        embedBuilder.setTitle(formattedItemName);
+        embedBuilder.setDescription(itemEntity.getDescription());
+        embedBuilder.setThumbnail("attachment://" + picUrl);
 
         if (itemEntity.getComponentOne() != null && itemEntity.getComponentTwo() != null) {
-            String componentOneName = DiscordMessageHelper
-                .formatName(itemEntity.getComponentOneName());
-            String componentTwoName = DiscordMessageHelper
-                .formatName(itemEntity.getComponentTwoName());
+            String componentOneName = itemEntity.getComponentOneName().toLowerCase();
+            String componentTwoName = itemEntity.getComponentTwoName().toLowerCase();
 
-            returnMessage.append("\n").append("#1: ").append(componentOneName);
-            returnMessage.append("\n").append("#2: ").append(componentTwoName);
+            ItemEntity componentOneEntity = itemsRepository.findOneByName(componentOneName);
+            ItemEntity componentTwoEntity = itemsRepository.findOneByName(componentTwoName);
+
+            if (componentOneEntity != null && componentTwoEntity != null) {
+                String formattedComponentOneName = DiscordMessageHelper
+                    .formatName(componentOneName);
+                String formattedComponentTwoName = DiscordMessageHelper
+                    .formatName(componentTwoName);
+                embedBuilder.addField("Components",
+                    formattedComponentOneName + ", " + formattedComponentTwoName, false);
+            }
         }
-
-        return returnMessage.toString();
     }
 }

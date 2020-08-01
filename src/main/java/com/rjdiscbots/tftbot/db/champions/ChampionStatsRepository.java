@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChampionStatsRepository extends JpaRepository<ChampionStatsEntity, Long> {
 
-    List<ChampionStatsEntity> findByChampionOrderByStarsAsc(String championName);
+    ChampionStatsEntity findOneByChampionOrderByStarsAsc(String championName);
 }

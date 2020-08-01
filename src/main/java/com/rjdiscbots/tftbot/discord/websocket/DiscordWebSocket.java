@@ -2,6 +2,7 @@ package com.rjdiscbots.tftbot.discord.websocket;
 
 import com.rjdiscbots.tftbot.discord.message.MessageReceivedEventHandler;
 import javax.annotation.Nonnull;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ public class DiscordWebSocket extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        if (!event.isWebhookMessage() && event.getMember() != null && event.getMember().isOwner()) {
-            messageReceivedEventHandler.handleMessage(event);
-        }
+        messageReceivedEventHandler.handleMessage(event);
     }
 }

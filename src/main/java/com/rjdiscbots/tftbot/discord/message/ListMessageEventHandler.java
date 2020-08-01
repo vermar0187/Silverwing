@@ -11,7 +11,10 @@ import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
+import java.util.Map;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,7 +35,9 @@ public class ListMessageEventHandler {
         this.synergyRepository = synergyRepository;
     }
 
-    public String handleListMessage(String rawListMessage) throws InvalidMessageException {
+    public void handleEmbedListMessage(@NonNull String rawListMessage,
+        @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
+        throws InvalidMessageException {
         if (!rawListMessage.startsWith("!list ")) {
             throw new IllegalArgumentException(
                 "Message does begin with !list: " + rawListMessage);
@@ -42,67 +47,79 @@ public class ListMessageEventHandler {
         rawListMessage = rawListMessage.trim();
 
         if (rawListMessage.startsWith("galaxies")) {
-            return fetchAllGalaxies();
+            fetchAllGalaxies(embedBuilder);
         } else if (rawListMessage.startsWith("components")) {
-            return fetchAllComponents();
+            fetchAllComponents(embedBuilder);
         } else if (rawListMessage.startsWith("commands")) {
-            return fetchAllCommands();
+            fetchAllCommands(embedBuilder);
         } else if (rawListMessage.startsWith("synergies")) {
-            return fetchAllSynergies();
+            fetchAllSynergies(embedBuilder);
         } else {
             throw new CommandDoesNotExistException("Invalid command provided!");
         }
+
+        String picUrl = "pengu.png";
+        filePathMap.put(picUrl, "patch/" + picUrl);
+        embedBuilder.setThumbnail("attachment://" + picUrl);
     }
 
-    private String fetchAllSynergies() throws EntityDoesNotExistException {
+    private void fetchAllSynergies(EmbedBuilder embedBuilder) throws EntityDoesNotExistException {
         List<SynergyEntity> synergyEntities = synergyRepository.findAll();
 
         if (synergyEntities.isEmpty()) {
             throw new EntityDoesNotExistException("No synergies could be found!");
         }
 
-        StringBuilder returnMessage = new StringBuilder();
-        returnMessage.append("__").append("Synergies").append("__");
+        embedBuilder.setTitle("Synergies");
+        embedBuilder.setDescription("All available synergies in TFT.");
 
         for (SynergyEntity synergyEntity : synergyEntities) {
             String formattedSynergyName = DiscordMessageHelper
                 .formatName(synergyEntity.getName());
-            returnMessage.append("\n").append(formattedSynergyName);
+
+            String desc = synergyEntity.getDescription();
+
+            if ((desc == null || desc.isEmpty()) && (synergyEntity.getInnate() != null
+                && !synergyEntities.isEmpty())) {
+                desc = synergyEntity.getInnate();
+            } else if (desc == null || desc.isEmpty()) {
+                desc = "No available description";
+            }
+
+            embedBuilder.addField(formattedSynergyName, desc, false);
         }
-
-        return returnMessage.toString();
     }
 
-    private String fetchAllCommands() {
-        return "__" + "Commands" + "__" + "\n"
-            + "!champion <champion name>" + "\n"
-            + "!list [galaxies, components, commands, synergies]" + "\n"
-            + "!item <item name>" + "\n"
-            + "!galaxy <galaxy name>" + "\n"
-            + "!synergy <synergy name>" + "\n"
-            + "!build [--desc] <item component 1>, <item component 2>, ..."
-            + "\n";
+    private void fetchAllCommands(EmbedBuilder embedBuilder) {
+        embedBuilder.setTitle("Commands");
+        embedBuilder.setDescription("All commands and their parameters.");
+        embedBuilder.addField("Champion", "!champion <champion name>", false);
+        embedBuilder.addField("List", "!list [galaxies, components, commands, synergies]", false);
+        embedBuilder.addField("Items", "!item <item name>", false);
+        embedBuilder.addField("Galaxies", "!galaxy <galaxy name>", false);
+        embedBuilder.addField("Synergies", "!synergy <synergy name>", false);
+        embedBuilder
+            .addField("Build", "!build [--desc] <item component 1>, <item component 2>, ...",
+                false);
     }
 
-    private String fetchAllGalaxies() throws EntityDoesNotExistException {
+    private void fetchAllGalaxies(EmbedBuilder embedBuilder) throws EntityDoesNotExistException {
         List<GalaxyEntity> galaxiesEntities = galaxiesRepository.findAll();
 
         if (galaxiesEntities.isEmpty()) {
             throw new EntityDoesNotExistException("No galaxies could be found!");
         }
 
-        StringBuilder returnMessage = new StringBuilder();
-        returnMessage.append("__").append("Galaxies").append("__");
+        embedBuilder.setTitle("Galaxies");
+        embedBuilder.setTitle("All galaxies in the current patch of TFT");
 
         for (GalaxyEntity galaxiesEntity : galaxiesEntities) {
             String formattedGalaxyName = DiscordMessageHelper.formatName(galaxiesEntity.getName());
-            returnMessage.append("\n").append(formattedGalaxyName);
+            embedBuilder.addField(formattedGalaxyName, galaxiesEntity.getDescripiton(), false);
         }
-
-        return returnMessage.toString();
     }
 
-    private String fetchAllComponents() throws EntityDoesNotExistException {
+    private void fetchAllComponents(EmbedBuilder embedBuilder) throws EntityDoesNotExistException {
         List<ItemEntity> itemEntities = itemsRepository
             .findByComponentOneIsNullAndComponentTwoIsNull();
 
@@ -110,16 +127,12 @@ public class ListMessageEventHandler {
             throw new EntityDoesNotExistException("No components could be found!");
         }
 
-        StringBuilder returnMessage = new StringBuilder();
-        returnMessage.append("__").append("Components").append("__");
+        embedBuilder.setTitle("Components");
+        embedBuilder.setTitle("All components in the current patch of TFT");
 
         for (ItemEntity itemEntity : itemEntities) {
             String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
-
-            returnMessage.append("\n").append(formattedItemName).append(": ")
-                .append(itemEntity.getDescription());
+            embedBuilder.addField(formattedItemName, itemEntity.getDescription(), false);
         }
-
-        return returnMessage.toString();
     }
 }

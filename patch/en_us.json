@@ -1503,7 +1503,7 @@
                 },
                 {
                     "ability": {
-                        "desc": "Aurelion Sol launches fighters which fly out to random enemies and blast them, dealing @ModifiedDamage@ magic damage and draining @ManaDrain@ mana, then return. <br><br>The first time he casts, Aurelion Sol launches @InitialFighters@ fighters. Subsequent casts launch all returned fighters, plus @FightersPerCast@ additional.",
+                        "desc": "Aurelion Sol launches fighters which fly out to random enemies and blast them, dealing @ModifiedDamage@ magic damage and draining @ManaDrain@ mana, then return. The first time he casts, Aurelion Sol launches @InitialFighters@ fighters. Subsequent casts launch all returned fighters, plus @FightersPerCast@ additional.",
                         "icon": "ASSETS/Characters/AurelionSol/HUD/Icons2D/AurelionSol_W_StarsOut.dds",
                         "name": "Mobilize the Fleet",
                         "variables": [

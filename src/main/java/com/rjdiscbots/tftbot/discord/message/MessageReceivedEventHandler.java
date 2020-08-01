@@ -1,8 +1,15 @@
 package com.rjdiscbots.tftbot.discord.message;
 
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,28 +41,62 @@ public class MessageReceivedEventHandler {
         String rawMessage = event.getMessage().getContentRaw();
         rawMessage = rawMessage.trim().toLowerCase();
 
-        String returnMessage = null;
+        String errorMessage = null;
+        // An embed message (priority)
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        Map<String, String> filePathMap = new HashMap<>();
+        embedBuilder.setAuthor("TFT Bot", null, "attachment://tft_icon.png");
 
         try {
             if (rawMessage.startsWith("!galaxy ")) {
-                returnMessage = galaxyMessageEventHandler.handleGalaxyMessage(rawMessage);
+                galaxyMessageEventHandler
+                    .handleEmbedGalaxyMessage(rawMessage, embedBuilder, filePathMap);
             } else if (rawMessage.startsWith("!list ")) {
-                returnMessage = listMessageEventHandler.handleListMessage(rawMessage);
+                listMessageEventHandler
+                    .handleEmbedListMessage(rawMessage, embedBuilder, filePathMap);
             } else if (rawMessage.startsWith("!item ")) {
-                returnMessage = itemMessageEventHandler.handleItemMessage(rawMessage);
+                itemMessageEventHandler
+                    .handleEmbedItemMessage(rawMessage, embedBuilder, filePathMap);
             } else if (rawMessage.startsWith("!build ")) {
-                returnMessage = buildMessageEventHandler.handleBuildMessage(rawMessage);
+                buildMessageEventHandler
+                    .handleEmbedBuildMessage(rawMessage, embedBuilder, filePathMap);
             } else if (rawMessage.startsWith("!synergy ")) {
-                returnMessage = synergyMessageEventHandler.handleSynergyMessage(rawMessage);
+                synergyMessageEventHandler
+                    .handleEmbedSynergyMessage(rawMessage, embedBuilder, filePathMap);
             } else if (rawMessage.startsWith("!champion ")) {
-                returnMessage = championMessageEventHandler.handleChampionMessage(rawMessage);
+                championMessageEventHandler
+                    .handleEmbedChampionMessage(rawMessage, embedBuilder, filePathMap);
             } else {
                 return;
             }
         } catch (InvalidMessageException e) {
-            returnMessage = e.getMessage();
+            // need purposeful logging here
+            errorMessage = e.getMessage();
         }
 
-        event.getChannel().sendMessage(returnMessage).queue();
+        MessageChannel messageChannel = event.getChannel();
+
+        if (errorMessage != null) {
+            sendTextMessage(messageChannel, errorMessage);
+        } else {
+            sendEmbedMessage(messageChannel, embedBuilder, filePathMap);
+        }
+    }
+
+    private void sendTextMessage(MessageChannel messageChannel, String returnMessage) {
+        messageChannel.sendMessage(returnMessage).queue();
+    }
+
+    private void sendEmbedMessage(MessageChannel messageChannel, EmbedBuilder embedBuilder,
+        Map<String, String> filePathMap) {
+        File tftIconFile = new File("assets/tft_icon.png");
+        MessageAction messageAction = messageChannel.sendFile(tftIconFile, "tft_icon.png");
+
+        for (Map.Entry<String, String> fileName : filePathMap.entrySet()) {
+            File imgFile = new File(fileName.getValue());
+            messageAction = messageAction.addFile(imgFile, fileName.getKey());
+        }
+
+        messageAction.embed(embedBuilder.build()).queue();
     }
 }
