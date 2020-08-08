@@ -38,7 +38,21 @@ public class DiscordMessageHelper {
         return BigDecimal.valueOf(dbl).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
     }
 
-    public static String formatDoubleList(List<Double> doubleList, boolean isPercent) {
+    public static String formatStringList(List<String> strs) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < strs.size(); i++) {
+            String str = strs.get(i);
+            if (i != 0) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(formatName(str));
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static String formatAbilityDoubleList(List<Double> doubleList, boolean isPercent) {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("**(");
@@ -108,7 +122,8 @@ public class DiscordMessageHelper {
                 for (String tag : variableTags) {
                     if (StringUtils.contains(tag, variableName)) {
                         System.out.println(variableName + " vs. " + tag);
-                        String doubleListStr = formatDoubleList(values, StringUtils.contains(tag, "100"));
+                        String doubleListStr = formatAbilityDoubleList(values,
+                            StringUtils.contains(tag, "100"));
                         System.out.println(tag + " vs. " + doubleListStr);
                         abilityDesc = abilityDesc.replaceFirst(tag, doubleListStr);
                     }

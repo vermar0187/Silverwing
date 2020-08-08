@@ -1,5 +1,7 @@
 package com.rjdiscbots.tftbot.discord.message;
 
+import com.rjdiscbots.tftbot.db.compositions.CompositionEntity;
+import com.rjdiscbots.tftbot.db.compositions.CompositionRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.db.items.ItemEntity;
@@ -26,13 +28,17 @@ public class ListMessageEventHandler {
 
     private SynergyRepository synergyRepository;
 
+    private CompositionRepository compositionRepository;
+
     @Autowired
     public ListMessageEventHandler(ItemsRepository itemsRepository,
         GalaxiesRepository galaxiesRepository,
-        SynergyRepository synergyRepository) {
+        SynergyRepository synergyRepository,
+        CompositionRepository compositionRepository) {
         this.itemsRepository = itemsRepository;
         this.galaxiesRepository = galaxiesRepository;
         this.synergyRepository = synergyRepository;
+        this.compositionRepository = compositionRepository;
     }
 
     public void handleEmbedListMessage(@NonNull String rawListMessage,
@@ -54,6 +60,8 @@ public class ListMessageEventHandler {
             fetchAllCommands(embedBuilder);
         } else if (rawListMessage.startsWith("synergies")) {
             fetchAllSynergies(embedBuilder);
+        } else if (rawListMessage.startsWith("comps")) {
+            fetchAllCompositions(embedBuilder);
         } else {
             throw new CommandDoesNotExistException("Invalid command provided!");
         }
@@ -94,7 +102,8 @@ public class ListMessageEventHandler {
         embedBuilder.setTitle("Commands");
         embedBuilder.setDescription("All commands and their parameters.");
         embedBuilder.addField("Champion", "!champion <champion name>", false);
-        embedBuilder.addField("List", "!list [galaxies, components, commands, synergies]", false);
+        embedBuilder
+            .addField("List", "!list [galaxies, components, commands, synergies, comps]", false);
         embedBuilder.addField("Items", "!item <item name>", false);
         embedBuilder.addField("Galaxies", "!galaxy <galaxy name>", false);
         embedBuilder.addField("Synergies", "!synergy <synergy name>", false);
@@ -128,11 +137,29 @@ public class ListMessageEventHandler {
         }
 
         embedBuilder.setTitle("Components");
-        embedBuilder.setTitle("All components in the current patch of TFT");
+        embedBuilder.setDescription("All components in the current patch of TFT");
 
         for (ItemEntity itemEntity : itemEntities) {
             String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
             embedBuilder.addField(formattedItemName, itemEntity.getDescription(), false);
+        }
+    }
+
+    private void fetchAllCompositions(EmbedBuilder embedBuilder)
+        throws EntityDoesNotExistException {
+        List<CompositionEntity> compositionEntities = compositionRepository.findAll();
+
+        if (compositionEntities.isEmpty()) {
+            throw new EntityDoesNotExistException("No compositions could be found!");
+        }
+
+        embedBuilder.setTitle("Compositions");
+        embedBuilder.setDescription("All compositions as curated by TFT Bot.");
+
+        for (CompositionEntity compositionEntity : compositionEntities) {
+            String champions = DiscordMessageHelper
+                .formatStringList(compositionEntity.getEndComp());
+            embedBuilder.addField(compositionEntity.getName(), champions, false);
         }
     }
 }
