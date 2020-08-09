@@ -107,6 +107,7 @@ public class ListMessageEventHandler {
         embedBuilder.addField("Items", "!item <item name>", false);
         embedBuilder.addField("Galaxies", "!galaxy <galaxy name>", false);
         embedBuilder.addField("Synergies", "!synergy <synergy name>", false);
+        embedBuilder.addField("Compositions", "!comp <comp name>", false);
         embedBuilder
             .addField("Build", "!build [--desc] <item component 1>, <item component 2>, ...",
                 false);
@@ -157,9 +158,10 @@ public class ListMessageEventHandler {
         embedBuilder.setDescription("All compositions as curated by TFT Bot.");
 
         for (CompositionEntity compositionEntity : compositionEntities) {
+            String compName = DiscordMessageHelper.formatName(compositionEntity.getName());
             String champions = DiscordMessageHelper
                 .formatStringList(compositionEntity.getEndComp());
-            embedBuilder.addField(compositionEntity.getName(), champions, false);
+            embedBuilder.addField(compName, champions, false);
         }
     }
 }

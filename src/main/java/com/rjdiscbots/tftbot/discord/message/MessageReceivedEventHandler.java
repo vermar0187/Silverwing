@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +20,7 @@ public class MessageReceivedEventHandler {
     private BuildMessageEventHandler buildMessageEventHandler;
     private SynergyMessageEventHandler synergyMessageEventHandler;
     private ChampionMessageEventHandler championMessageEventHandler;
+    private CompositionMessageEventHandler compositionMessageEventHandler;
 
     @Autowired
     public MessageReceivedEventHandler(GalaxyMessageEventHandler galaxyMessageEventHandler,
@@ -28,13 +28,15 @@ public class MessageReceivedEventHandler {
         BuildMessageEventHandler buildMessageEventHandler,
         ListMessageEventHandler listMessageEventHandler,
         SynergyMessageEventHandler synergyMessageEventHandler,
-        ChampionMessageEventHandler championMessageEventHandler) {
+        ChampionMessageEventHandler championMessageEventHandler,
+        CompositionMessageEventHandler compositionMessageEventHandler) {
         this.galaxyMessageEventHandler = galaxyMessageEventHandler;
         this.itemMessageEventHandler = itemMessageEventHandler;
         this.buildMessageEventHandler = buildMessageEventHandler;
         this.listMessageEventHandler = listMessageEventHandler;
         this.synergyMessageEventHandler = synergyMessageEventHandler;
         this.championMessageEventHandler = championMessageEventHandler;
+        this.compositionMessageEventHandler = compositionMessageEventHandler;
     }
 
     public void handleMessage(MessageReceivedEvent event) {
@@ -42,7 +44,7 @@ public class MessageReceivedEventHandler {
         rawMessage = rawMessage.trim().toLowerCase();
 
         String errorMessage = null;
-        // An embed message (priority)
+
         EmbedBuilder embedBuilder = new EmbedBuilder();
         Map<String, String> filePathMap = new HashMap<>();
         embedBuilder.setAuthor("TFT Bot", null, "attachment://tft_icon.png");
@@ -66,6 +68,9 @@ public class MessageReceivedEventHandler {
             } else if (rawMessage.startsWith("!champion ")) {
                 championMessageEventHandler
                     .handleEmbedChampionMessage(rawMessage, embedBuilder, filePathMap);
+            } else if (rawMessage.startsWith("!comp ")) {
+                compositionMessageEventHandler
+                    .handleEmbedCompositionMessage(rawMessage, embedBuilder, filePathMap);
             } else {
                 return;
             }
@@ -77,14 +82,14 @@ public class MessageReceivedEventHandler {
         MessageChannel messageChannel = event.getChannel();
 
         if (errorMessage != null) {
-            sendTextMessage(messageChannel, errorMessage);
+            sendErrorTextMessage(messageChannel, errorMessage);
         } else {
             sendEmbedMessage(messageChannel, embedBuilder, filePathMap);
         }
     }
 
-    private void sendTextMessage(MessageChannel messageChannel, String returnMessage) {
-        messageChannel.sendMessage(returnMessage).queue();
+    private void sendErrorTextMessage(MessageChannel messageChannel, String errorMessage) {
+        messageChannel.sendMessage(errorMessage).queue();
     }
 
     private void sendEmbedMessage(MessageChannel messageChannel, EmbedBuilder embedBuilder,
@@ -94,7 +99,11 @@ public class MessageReceivedEventHandler {
 
         for (Map.Entry<String, String> fileName : filePathMap.entrySet()) {
             File imgFile = new File(fileName.getValue());
-            messageAction = messageAction.addFile(imgFile, fileName.getKey());
+            try {
+                messageAction = messageAction.addFile(imgFile, fileName.getKey());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         messageAction.embed(embedBuilder.build()).queue();

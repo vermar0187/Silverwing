@@ -5,7 +5,6 @@ import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
-import java.util.List;
 import java.util.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class GalaxyMessageEventHandler {
         GalaxyEntity galaxy = galaxiesRepository.findOneByName(galaxyName);
 
         if (galaxy == null) {
-            throw new EntityDoesNotExistException("Invalid galaxy provided");
+            throw new EntityDoesNotExistException("Invalid galaxy provided!");
         }
 
         String formattedGalaxyName = DiscordMessageHelper.formatName(galaxy.getName());

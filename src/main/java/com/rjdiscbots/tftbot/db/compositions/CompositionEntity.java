@@ -1,7 +1,6 @@
 package com.rjdiscbots.tftbot.db.compositions;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,21 +40,25 @@ public class CompositionEntity {
 
     @Type(type = "list-array")
     @Column(
-        name = "beg_comp",
+        name = "early_comp",
         columnDefinition = "text[]"
     )
     private List<String> begComp;
+
+    @Column(name = "comp_strategy")
+    private String compStrategy;
 
     public CompositionEntity() {
     }
 
     public CompositionEntity(String name, double set, List<String> endComp,
-        List<String> midComp, List<String> begComp) {
+        List<String> midComp, List<String> begComp, String compStrategy) {
         this.name = name;
         this.set = set;
         this.endComp = endComp;
         this.midComp = midComp;
         this.begComp = begComp;
+        this.compStrategy = compStrategy;
     }
 
     public String getName() {
@@ -96,5 +99,13 @@ public class CompositionEntity {
 
     public void setBegComp(List<String> begComp) {
         this.begComp = begComp;
+    }
+
+    public String getCompStrategy() {
+        return compStrategy;
+    }
+
+    public void setCompStrategy(String compStrategy) {
+        this.compStrategy = compStrategy;
     }
 }

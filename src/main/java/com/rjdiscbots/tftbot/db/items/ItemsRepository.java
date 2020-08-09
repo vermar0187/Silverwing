@@ -9,6 +9,8 @@ public interface ItemsRepository extends JpaRepository<ItemEntity, Long> {
 
     ItemEntity findOneByName(String name);
 
+    ItemEntity findOneById(Integer id);
+
     List<ItemEntity> findByComponentOneIsNullAndComponentTwoIsNull();
 
     List<ItemEntity> findByComponentOneNameOrComponentTwoName(

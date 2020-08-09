@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.rjdiscbots.tftbot.db.compositions.CompositionItemsEntity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -134,5 +137,28 @@ public class DiscordMessageHelper {
         stringBuilder.append(abilityDesc.replaceAll("@", ""));
 
         return stringBuilder.toString();
+    }
+
+    public static Map<String, List<CompositionItemsEntity>> formatCompositionItemsByStage(
+        List<CompositionItemsEntity> compositionItemsEntities) {
+        Map<String, List<CompositionItemsEntity>> stageMap = new HashMap<>();
+
+        if (compositionItemsEntities == null || compositionItemsEntities.isEmpty()) {
+            return stageMap;
+        }
+
+        for (CompositionItemsEntity compositionItemsEntity : compositionItemsEntities) {
+            String stage = compositionItemsEntity.getStage();
+
+            if (stageMap.containsKey(stage)) {
+                stageMap.get(stage).add(compositionItemsEntity);
+            } else {
+                List<CompositionItemsEntity> champions = new ArrayList<>();
+                champions.add(compositionItemsEntity);
+                stageMap.put(stage, champions);
+            }
+        }
+
+        return stageMap;
     }
 }

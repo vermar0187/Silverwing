@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompositionRepository extends JpaRepository<CompositionEntity, Long> {
 
+    CompositionEntity findOneByName(String name);
 }
