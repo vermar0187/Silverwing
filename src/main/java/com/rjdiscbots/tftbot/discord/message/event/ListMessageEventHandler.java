@@ -1,4 +1,4 @@
-package com.rjdiscbots.tftbot.discord.message;
+package com.rjdiscbots.tftbot.discord.message.event;
 
 import com.rjdiscbots.tftbot.db.compositions.CompositionEntity;
 import com.rjdiscbots.tftbot.db.compositions.CompositionRepository;
@@ -8,9 +8,9 @@ import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
 import com.rjdiscbots.tftbot.db.synergies.SynergyEntity;
 import com.rjdiscbots.tftbot.db.synergies.SynergyRepository;
-import com.rjdiscbots.tftbot.exceptions.message.CommandDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import com.rjdiscbots.tftbot.exceptions.message.ListCommandDoesNotExistException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ListMessageEventHandler {
+public class ListMessageEventHandler implements MessageEvent {
 
     private ItemsRepository itemsRepository;
 
@@ -41,7 +41,8 @@ public class ListMessageEventHandler {
         this.compositionRepository = compositionRepository;
     }
 
-    public void handleEmbedListMessage(@NonNull String rawListMessage,
+    @Override
+    public void handleEmbedMessage(@NonNull String rawListMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawListMessage.startsWith("!list ")) {
@@ -63,7 +64,7 @@ public class ListMessageEventHandler {
         } else if (rawListMessage.startsWith("comps")) {
             fetchAllCompositions(embedBuilder);
         } else {
-            throw new CommandDoesNotExistException("Invalid command provided!");
+            throw new ListCommandDoesNotExistException("Invalid list command provided!");
         }
 
         String picUrl = "pengu.png";

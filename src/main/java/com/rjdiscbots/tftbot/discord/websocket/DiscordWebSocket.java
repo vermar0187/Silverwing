@@ -1,6 +1,6 @@
 package com.rjdiscbots.tftbot.discord.websocket;
 
-import com.rjdiscbots.tftbot.discord.message.MessageReceivedEventHandler;
+import com.rjdiscbots.tftbot.discord.message.service.MessageService;
 import javax.annotation.Nonnull;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiscordWebSocket extends ListenerAdapter {
 
-    private MessageReceivedEventHandler messageReceivedEventHandler;
+    private MessageService messageService;
 
     @Autowired
-    public DiscordWebSocket(MessageReceivedEventHandler messageReceivedEventHandler) {
-        this.messageReceivedEventHandler = messageReceivedEventHandler;
+    public DiscordWebSocket(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        messageReceivedEventHandler.handleMessage(event);
+        messageService.handleMessage(event);
     }
 }

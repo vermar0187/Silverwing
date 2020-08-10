@@ -1,4 +1,4 @@
-package com.rjdiscbots.tftbot.discord.message;
+package com.rjdiscbots.tftbot.discord.message.event;
 
 import com.rjdiscbots.tftbot.db.compositions.CompositionEntity;
 import com.rjdiscbots.tftbot.db.compositions.CompositionItemsEntity;
@@ -17,7 +17,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CompositionMessageEventHandler {
+public class CompositionMessageEventHandler implements MessageEvent {
 
     private CompositionRepository compositionRepository;
 
@@ -34,7 +34,8 @@ public class CompositionMessageEventHandler {
         this.itemsRepository = itemsRepository;
     }
 
-    public void handleEmbedCompositionMessage(@NonNull String rawCompositionMessage,
+    @Override
+    public void handleEmbedMessage(@NonNull String rawCompositionMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawCompositionMessage.startsWith("!comp ")) {

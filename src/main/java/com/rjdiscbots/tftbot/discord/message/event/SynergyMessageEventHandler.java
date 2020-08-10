@@ -1,4 +1,4 @@
-package com.rjdiscbots.tftbot.discord.message;
+package com.rjdiscbots.tftbot.discord.message.event;
 
 import com.rjdiscbots.tftbot.db.champions.ChampionsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
@@ -18,7 +18,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SynergyMessageEventHandler {
+public class SynergyMessageEventHandler implements MessageEvent {
 
     private SynergyRepository synergyRepository;
 
@@ -31,7 +31,8 @@ public class SynergyMessageEventHandler {
         this.championsRepository = championsRepository;
     }
 
-    public void handleEmbedSynergyMessage(@NonNull String rawSynergyMessage,
+    @Override
+    public void handleEmbedMessage(@NonNull String rawSynergyMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawSynergyMessage.startsWith("!synergy ")) {

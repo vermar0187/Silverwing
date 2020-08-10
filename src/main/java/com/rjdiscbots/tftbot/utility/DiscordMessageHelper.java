@@ -124,10 +124,8 @@ public class DiscordMessageHelper {
 
                 for (String tag : variableTags) {
                     if (StringUtils.contains(tag, variableName)) {
-                        System.out.println(variableName + " vs. " + tag);
                         String doubleListStr = formatAbilityDoubleList(values,
                             StringUtils.contains(tag, "100"));
-                        System.out.println(tag + " vs. " + doubleListStr);
                         abilityDesc = abilityDesc.replaceFirst(tag, doubleListStr);
                     }
                 }

@@ -1,4 +1,4 @@
-package com.rjdiscbots.tftbot.discord.message;
+package com.rjdiscbots.tftbot.discord.message.event;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsEntity;
@@ -16,7 +16,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChampionMessageEventHandler {
+public class ChampionMessageEventHandler implements MessageEvent {
 
     private ChampionsRepository championsRepository;
     private ChampionStatsRepository championStatsRepository;
@@ -29,7 +29,8 @@ public class ChampionMessageEventHandler {
         this.championStatsRepository = championStatsRepository;
     }
 
-    public void handleEmbedChampionMessage(@NonNull String rawChampionMessage,
+    @Override
+    public void handleEmbedMessage(@NonNull String rawChampionMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawChampionMessage.startsWith("!champion ")) {

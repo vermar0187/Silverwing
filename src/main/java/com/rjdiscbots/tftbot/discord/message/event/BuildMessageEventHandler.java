@@ -1,4 +1,4 @@
-package com.rjdiscbots.tftbot.discord.message;
+package com.rjdiscbots.tftbot.discord.message.event;
 
 import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
@@ -18,7 +18,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BuildMessageEventHandler {
+public class BuildMessageEventHandler implements MessageEvent {
 
     private ItemsRepository itemsRepository;
 
@@ -27,7 +27,8 @@ public class BuildMessageEventHandler {
         this.itemsRepository = itemsRepository;
     }
 
-    public void handleEmbedBuildMessage(@NonNull String rawBuildMessage,
+    @Override
+    public void handleEmbedMessage(@NonNull String rawBuildMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawBuildMessage.startsWith("!build ")) {

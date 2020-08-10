@@ -1,4 +1,4 @@
-package com.rjdiscbots.tftbot.discord.message;
+package com.rjdiscbots.tftbot.discord.message.event;
 
 import com.rjdiscbots.tftbot.db.galaxies.GalaxiesRepository;
 import com.rjdiscbots.tftbot.db.galaxies.GalaxyEntity;
@@ -12,7 +12,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GalaxyMessageEventHandler {
+public class GalaxyMessageEventHandler implements MessageEvent {
 
     private GalaxiesRepository galaxiesRepository;
 
@@ -21,7 +21,8 @@ public class GalaxyMessageEventHandler {
         this.galaxiesRepository = galaxiesRepository;
     }
 
-    public void handleEmbedGalaxyMessage(@NonNull String rawGalaxyMessage,
+    @Override
+    public void handleEmbedMessage(@NonNull String rawGalaxyMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
         if (!rawGalaxyMessage.startsWith("!galaxy ")) {
