@@ -11,6 +11,8 @@ import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
 import java.util.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,10 @@ import org.springframework.stereotype.Component;
 public class ChampionMessageEventHandler implements MessageEvent {
 
     private ChampionsRepository championsRepository;
+
     private ChampionStatsRepository championStatsRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(ChampionMessageEventHandler.class);
 
     @Autowired
     public ChampionMessageEventHandler(
@@ -66,11 +71,12 @@ public class ChampionMessageEventHandler implements MessageEvent {
             traits = traits.concat(trait);
         }
 
-        String ability = "";
+        String ability = champion.getAbility();
         try {
             ability = DiscordMessageHelper.formatAbility(champion.getAbility());
         } catch (JsonProcessingException e) {
-            System.out.println("Unable to parse ability");
+            logger.info(String.format("Champion: %s, Ability: %s", formattedChampionName, ability),
+                e.fillInStackTrace());
             ability = "Not found";
         }
 

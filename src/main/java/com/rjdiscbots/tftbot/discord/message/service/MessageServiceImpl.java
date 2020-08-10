@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Component;
 public class MessageServiceImpl implements MessageService {
 
     private MessageEventFactory messageEventFactory;
+
+    private final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Autowired
     public MessageServiceImpl(MessageEventFactory messageEventFactory) {
@@ -42,6 +46,8 @@ public class MessageServiceImpl implements MessageService {
         } catch (InvalidMessageException e) {
             // need purposeful logging here
             errorMessage = e.getMessage();
+            logger.info(String.format("Command %s could not be handled", rawMessage),
+                e.fillInStackTrace());
         } catch (MessageEventDoesNotExistException e) {
             return;
         }
@@ -69,7 +75,8 @@ public class MessageServiceImpl implements MessageService {
             try {
                 messageAction = messageAction.addFile(imgFile, fileName.getKey());
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                logger.warn(String.format("File could not be processed: %s", fileName.getValue()),
+                    e.fillInStackTrace());
             }
         }
 
