@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -33,11 +34,10 @@ public class BuildMessageEventHandler implements MessageEvent {
         throws InvalidMessageException {
         if (!rawBuildMessage.startsWith("!build ")) {
             throw new IllegalArgumentException(
-                "Message does begin with !build: " + rawBuildMessage);
+                "Message does not begin with !build: " + rawBuildMessage);
         }
 
-        rawBuildMessage = rawBuildMessage.replaceFirst("!build ", "");
-        rawBuildMessage = rawBuildMessage.trim();
+        rawBuildMessage = rawBuildMessage.replaceFirst("!build ", "").trim();
 
         boolean addDesc = false;
         if (rawBuildMessage.startsWith("--desc")) {
@@ -57,7 +57,7 @@ public class BuildMessageEventHandler implements MessageEvent {
         List<String> componentsList = Arrays.stream(components.split("[,]")).map(String::trim)
             .collect(Collectors.toList());
 
-        if (componentsList.size() == 0) {
+        if (componentsList.size() == 0 || StringUtils.isAllBlank(components)) {
             throw new NoArgumentProvidedException("No components provided!");
         }
 
@@ -74,16 +74,20 @@ public class BuildMessageEventHandler implements MessageEvent {
 
         for (ItemEntity itemEntity : fullItems) {
             String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
-            if (addDesc) {
-                desc.append(itemEntity.getDescription());
-            }
+
             String componentOneName = DiscordMessageHelper
                 .formatName(itemEntity.getComponentOneName());
             String componentTwoName = DiscordMessageHelper
                 .formatName(itemEntity.getComponentTwoName());
 
-            desc.append(" (").append(componentOneName).append(", ")
-                .append(componentTwoName).append(")");
+            if (addDesc) {
+                desc.append(itemEntity.getDescription());
+                desc.append(" (").append(componentOneName).append(", ").append(componentTwoName)
+                    .append(")");
+            } else {
+                desc.append(componentOneName).append(", ").append(componentTwoName);
+            }
+
             embedBuilder.addField(formattedItemName, desc.toString(), false);
             desc.setLength(0);
         }
