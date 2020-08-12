@@ -10,7 +10,7 @@ import com.rjdiscbots.tftbot.db.synergies.SynergyEntity;
 import com.rjdiscbots.tftbot.db.synergies.SynergyRepository;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
-import com.rjdiscbots.tftbot.exceptions.message.ListCommandDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.message.NoArgumentProvidedException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
 import java.util.Map;
@@ -45,12 +45,12 @@ public class ListMessageEventHandler implements MessageEvent {
     public void handleEmbedMessage(@NonNull String rawListMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
-        if (!rawListMessage.startsWith("!list ")) {
+        if (!rawListMessage.startsWith("!list")) {
             throw new IllegalArgumentException(
-                "Message does begin with !list: " + rawListMessage);
+                "Message does not begin with !list: " + rawListMessage);
         }
 
-        rawListMessage = rawListMessage.replaceFirst("!list ", "");
+        rawListMessage = rawListMessage.replaceFirst("!list", "");
         rawListMessage = rawListMessage.trim();
 
         if (rawListMessage.startsWith("galaxies")) {
@@ -64,7 +64,7 @@ public class ListMessageEventHandler implements MessageEvent {
         } else if (rawListMessage.startsWith("comps")) {
             fetchAllCompositions(embedBuilder);
         } else {
-            throw new ListCommandDoesNotExistException("Invalid list command provided!");
+            throw new NoArgumentProvidedException("No list command provided!");
         }
 
         String picUrl = "pengu.png";

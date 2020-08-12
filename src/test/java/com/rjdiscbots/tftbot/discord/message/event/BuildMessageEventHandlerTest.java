@@ -44,7 +44,7 @@ public class BuildMessageEventHandlerTest {
 
 
     @Test
-    public void whenGivenValidComponentItemEntities_then_returnFullItemEntityInEmbed()
+    public void whenGivenValidComponentItemEntities_then_addToFullItemEntityInEmbed()
         throws InvalidMessageException {
         ItemEntity componentOne = TestHelper
             .createComponentItemEntity(1, TestHelper.COMPONENT_ITEM_NAME_ONE,
@@ -80,7 +80,7 @@ public class BuildMessageEventHandlerTest {
     }
 
     @Test
-    public void whenGivenValidComponentItemEntitiesWithDescTag_then_returnFullItemEntityWithDescInEmbed()
+    public void whenGivenValidComponentItemEntitiesWithDescTag_then_addToFullItemEntityWithDescInEmbed()
         throws InvalidMessageException {
         ItemEntity componentOne = TestHelper
             .createComponentItemEntity(1, TestHelper.COMPONENT_ITEM_NAME_ONE,

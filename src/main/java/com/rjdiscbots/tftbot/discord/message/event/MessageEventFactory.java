@@ -40,19 +40,19 @@ public class MessageEventFactory {
 
     public MessageEvent getMessageEventHandler(String rawMessage)
         throws MessageEventDoesNotExistException {
-        if (rawMessage.startsWith("!galaxy ")) {
+        if (rawMessage.startsWith("!galaxy")) {
             return galaxyMessageEventHandler;
-        } else if (rawMessage.startsWith("!list ")) {
+        } else if (rawMessage.startsWith("!list")) {
             return listMessageEventHandler;
-        } else if (rawMessage.startsWith("!item ")) {
+        } else if (rawMessage.startsWith("!item")) {
             return itemMessageEventHandler;
-        } else if (rawMessage.startsWith("!build ")) {
+        } else if (rawMessage.startsWith("!build")) {
             return buildMessageEventHandler;
-        } else if (rawMessage.startsWith("!synergy ")) {
+        } else if (rawMessage.startsWith("!synergy")) {
             return synergyMessageEventHandler;
-        } else if (rawMessage.startsWith("!champion ")) {
+        } else if (rawMessage.startsWith("!champion")) {
             return championMessageEventHandler;
-        } else if (rawMessage.startsWith("!comp ")) {
+        } else if (rawMessage.startsWith("!comp")) {
             return compositionMessageEventHandler;
         }
 

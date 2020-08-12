@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.rjdiscbots.tftbot.db.compositions.CompositionItemsEntity;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.rjdiscbots.tftbot.db.synergies.SetModel;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +38,8 @@ public class DiscordMessageHelper {
     }
 
     public static Double formatDouble(Double dbl) {
-        return BigDecimal.valueOf(dbl).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        return Double.valueOf(decimalFormat.format(dbl));
     }
 
     public static String formatStringList(List<String> strs) {
@@ -77,7 +78,7 @@ public class DiscordMessageHelper {
                 val = val * 100.00;
             }
 
-            stringBuilder.append(val);
+            stringBuilder.append(formatDouble(val));
         }
         stringBuilder.append(")**");
 
@@ -90,21 +91,30 @@ public class DiscordMessageHelper {
         return stringBuilder.toString();
     }
 
-    public static String formatAbility(String jsonAbility) throws JsonProcessingException {
+    public static String formatAbility(String jsonAbility)
+        throws JsonProcessingException, NullPointerException {
         StringBuilder stringBuilder = new StringBuilder();
         JsonNode jsonNode;
 
         jsonNode = objectMapper.readTree(jsonAbility);
 
-        String abilityName = jsonNode.get("name").asText();
+        JsonNode nameNode = jsonNode.get("name");
+        JsonNode descriptionNode = jsonNode.get("desc");
+
+        if (nameNode == null || descriptionNode == null) {
+            throw new NullPointerException();
+        }
+
+        String abilityName = nameNode.asText();
+        String abilityDesc = descriptionNode.asText();
+
         stringBuilder.append("**").append(abilityName).append("**").append(": ");
 
-        String abilityDesc = jsonNode.get("desc").asText();
         String[] variableTags = StringUtils.substringsBetween(abilityDesc, "@", "@");
 
         JsonNode variables = jsonNode.get("variables");
 
-        if (variables.isArray()) {
+        if (variables != null && variables.isArray()) {
             ArrayNode varArr = (ArrayNode) variables;
             for (JsonNode var : varArr) {
                 String variableName = var.get("name").asText();
@@ -116,7 +126,7 @@ public class DiscordMessageHelper {
 
                     if (valueArr.size() >= 4) {
                         for (int i = 1; i < 4; i++) {
-                            Double dblVal = formatDouble(valueArr.get(i).asDouble());
+                            Double dblVal = valueArr.get(i).asDouble();
                             values.add(dblVal);
                         }
                     }
@@ -158,5 +168,31 @@ public class DiscordMessageHelper {
         }
 
         return stageMap;
+    }
+
+    public static String formatSetModel(List<SetModel> models) {
+        StringBuilder medal = new StringBuilder();
+        for (int i = 0; i < models.size(); i++) {
+            SetModel setModel = models.get(i);
+            if (i != 0) {
+                medal.append(", ");
+            }
+
+            String style = setModel.getStyle();
+            style = style.substring(0, 1).toUpperCase() + style.substring(1);
+            Integer min = setModel.getMin();
+            Integer max = setModel.getMax();
+
+            medal.append(style).append(" (");
+
+            if (min != null && max != null) {
+                medal.append(min).append("-").append(max).append(")");
+            } else if (min != null) {
+                medal.append(min).append(")");
+            } else if (max != null) {
+                medal.append(max).append(")");
+            }
+        }
+        return medal.toString();
     }
 }

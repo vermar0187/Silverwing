@@ -4,14 +4,16 @@ import com.rjdiscbots.tftbot.db.compositions.CompositionEntity;
 import com.rjdiscbots.tftbot.db.compositions.CompositionItemsEntity;
 import com.rjdiscbots.tftbot.db.compositions.CompositionItemsRepository;
 import com.rjdiscbots.tftbot.db.compositions.CompositionRepository;
-import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import com.rjdiscbots.tftbot.exceptions.message.NoArgumentProvidedException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -38,15 +40,15 @@ public class CompositionMessageEventHandler implements MessageEvent {
     public void handleEmbedMessage(@NonNull String rawCompositionMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
-        if (!rawCompositionMessage.startsWith("!comp ")) {
+        if (!rawCompositionMessage.startsWith("!comp")) {
             throw new IllegalArgumentException(
-                "Message does begin with !comp: " + rawCompositionMessage);
+                "Message does not begin with !comp: " + rawCompositionMessage);
         }
 
-        rawCompositionMessage = rawCompositionMessage.replaceFirst("!comp ", "");
-        rawCompositionMessage = rawCompositionMessage.trim();
+        String compositionName = rawCompositionMessage.replaceFirst("!comp", "");
+        compositionName = compositionName.trim();
 
-        fetchComposition(rawCompositionMessage, embedBuilder);
+        fetchComposition(compositionName, embedBuilder);
 
         String picUrl = "pengu.png";
         filePathMap.put(picUrl, "patch/" + picUrl);
@@ -54,12 +56,15 @@ public class CompositionMessageEventHandler implements MessageEvent {
     }
 
     private void fetchComposition(String compositionName, EmbedBuilder embedBuilder)
-        throws EntityDoesNotExistException {
+        throws EntityDoesNotExistException, NoArgumentProvidedException {
+        if (compositionName == null || StringUtils.isAllBlank(compositionName)) {
+            throw new NoArgumentProvidedException("No composition provided!");
+        }
+
         CompositionEntity composition = compositionRepository.findOneByName(compositionName);
 
         if (composition == null) {
-            throw new EntityDoesNotExistException(
-                "Invalid composition provided! Please use the command: **!list comps**");
+            throw new EntityDoesNotExistException("Invalid composition provided!");
         }
 
         String formattedCompositionName = DiscordMessageHelper.formatName(composition.getName());
@@ -97,7 +102,7 @@ public class CompositionMessageEventHandler implements MessageEvent {
         List<CompositionItemsEntity> compositionItemsEntities = champions.get(stage);
 
         if (compositionItemsEntities == null) {
-            return "";
+            return "No necessary items";
         }
 
         for (CompositionItemsEntity compositionItemsEntity : compositionItemsEntities) {
@@ -106,16 +111,13 @@ public class CompositionMessageEventHandler implements MessageEvent {
             championItems.append(formattedChampionName).append(" => ");
             List<Integer> itemIds = compositionItemsEntity.getItems();
 
-            for (int i = 0; i < itemIds.size(); i++) {
-                Integer id = itemIds.get(i);
-                if (i != 0) {
-                    championItems.append(", ");
-                }
-                ItemEntity itemEntity = itemsRepository.findOneById(id);
-                String formattedItemName = DiscordMessageHelper.formatName(itemEntity.getName());
-                championItems.append(formattedItemName);
-            }
-            championItems.append("\n");
+            List<String> itemNames = itemIds.stream().map((id) -> itemsRepository.findOneById(id))
+                .map((itemEntity -> DiscordMessageHelper.formatName(itemEntity.getName())))
+                .collect(Collectors.toList());
+
+            String formattedItemList = DiscordMessageHelper.formatStringList(itemNames);
+
+            championItems.append(formattedItemList).append("\n");
         }
 
         return championItems.toString();

@@ -32,20 +32,22 @@ public class BuildMessageEventHandler implements MessageEvent {
     public void handleEmbedMessage(@NonNull String rawBuildMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
-        if (!rawBuildMessage.startsWith("!build ")) {
+        if (!rawBuildMessage.startsWith("!build")) {
             throw new IllegalArgumentException(
                 "Message does not begin with !build: " + rawBuildMessage);
         }
 
-        rawBuildMessage = rawBuildMessage.replaceFirst("!build ", "").trim();
+        String itemComponents = rawBuildMessage.replaceFirst("!build", "");
+        itemComponents = itemComponents.trim();
 
         boolean addDesc = false;
-        if (rawBuildMessage.startsWith("--desc")) {
-            rawBuildMessage = rawBuildMessage.replaceFirst("--desc", "").trim();
+        if (itemComponents.startsWith("--desc")) {
+            itemComponents = itemComponents.replaceFirst("--desc", "");
+            itemComponents = itemComponents.trim();
             addDesc = true;
         }
 
-        fetchItemBuilds(rawBuildMessage, addDesc, embedBuilder);
+        fetchItemBuilds(itemComponents, addDesc, embedBuilder);
 
         String picUrl = "pengu.png";
         filePathMap.put(picUrl, "patch/" + picUrl);

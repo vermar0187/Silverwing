@@ -4,9 +4,11 @@ import com.rjdiscbots.tftbot.db.items.ItemEntity;
 import com.rjdiscbots.tftbot.db.items.ItemsRepository;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import com.rjdiscbots.tftbot.exceptions.message.NoArgumentProvidedException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
 import java.util.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -25,19 +27,24 @@ public class ItemMessageEventHandler implements MessageEvent {
     public void handleEmbedMessage(@NonNull String rawItemMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
-        if (!rawItemMessage.startsWith("!item ")) {
+        if (!rawItemMessage.startsWith("!item")) {
             throw new IllegalArgumentException(
-                "Message does begin with !item: " + rawItemMessage);
+                "Message does not begin with !item: " + rawItemMessage);
         }
 
-        rawItemMessage = rawItemMessage.replaceFirst("!item ", "");
-        rawItemMessage = rawItemMessage.trim();
+        String itemName = rawItemMessage.replaceFirst("!item", "");
+        itemName = itemName.trim();
 
-        fetchItemDescription(rawItemMessage, embedBuilder, filePathMap);
+        fetchItemDescription(itemName, embedBuilder, filePathMap);
     }
 
     private void fetchItemDescription(String item, EmbedBuilder embedBuilder,
-        Map<String, String> filePathMap) throws EntityDoesNotExistException {
+        Map<String, String> filePathMap) throws EntityDoesNotExistException,
+        NoArgumentProvidedException {
+        if (item == null || StringUtils.isAllBlank(item)) {
+            throw new NoArgumentProvidedException("No item provided!");
+        }
+
         ItemEntity itemEntity = itemsRepository.findOneByName(item);
 
         if (itemEntity == null) {

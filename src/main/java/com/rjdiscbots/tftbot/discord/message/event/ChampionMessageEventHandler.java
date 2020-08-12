@@ -7,10 +7,11 @@ import com.rjdiscbots.tftbot.db.champions.ChampionsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
 import com.rjdiscbots.tftbot.exceptions.message.EntityDoesNotExistException;
 import com.rjdiscbots.tftbot.exceptions.message.InvalidMessageException;
+import com.rjdiscbots.tftbot.exceptions.message.NoArgumentProvidedException;
 import com.rjdiscbots.tftbot.utility.DiscordMessageHelper;
-import java.util.List;
 import java.util.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +39,24 @@ public class ChampionMessageEventHandler implements MessageEvent {
     public void handleEmbedMessage(@NonNull String rawChampionMessage,
         @NonNull EmbedBuilder embedBuilder, @NonNull Map<String, String> filePathMap)
         throws InvalidMessageException {
-        if (!rawChampionMessage.startsWith("!champion ")) {
+        if (!rawChampionMessage.startsWith("!champion")) {
             throw new IllegalArgumentException(
-                "Message does begin with !champion: " + rawChampionMessage);
+                "Message does not begin with !champion: " + rawChampionMessage);
         }
 
-        String championMessage = rawChampionMessage.replaceFirst("!champion ", "");
-        championMessage = championMessage.trim();
+        String championName = rawChampionMessage.replaceFirst("!champion", "");
+        championName = championName.trim();
 
-        fetchChampion(championMessage, embedBuilder, filePathMap);
-        fetchChampionStats(championMessage, embedBuilder);
+        fetchChampion(championName, embedBuilder, filePathMap);
+        fetchChampionStats(championName, embedBuilder);
     }
 
     private void fetchChampion(String championName, EmbedBuilder embedBuilder,
-        Map<String, String> filePathMap) throws EntityDoesNotExistException {
+        Map<String, String> filePathMap) throws EntityDoesNotExistException,
+        NoArgumentProvidedException {
+        if (championName == null || StringUtils.isAllBlank(championName)) {
+            throw new NoArgumentProvidedException("No champion provided!");
+        }
 
         ChampionsEntity champion = championsRepository.findOneByName(championName);
 
@@ -61,20 +66,12 @@ public class ChampionMessageEventHandler implements MessageEvent {
 
         String formattedChampionName = DiscordMessageHelper.formatName(championName);
 
-        String traits = "";
-        List<String> traitList = champion.getTraits();
-        for (int i = 0; i < traitList.size(); i++) {
-            String trait = DiscordMessageHelper.formatName(traitList.get(i));
-            if (i != 0) {
-                traits = traits.concat(", ");
-            }
-            traits = traits.concat(trait);
-        }
+        String traits = DiscordMessageHelper.formatStringList(champion.getTraits());
 
         String ability = champion.getAbility();
         try {
             ability = DiscordMessageHelper.formatAbility(champion.getAbility());
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | NullPointerException e) {
             logger.info(String.format("Champion: %s, Ability: %s", formattedChampionName, ability),
                 e.fillInStackTrace());
             ability = "Not found";
@@ -96,10 +93,10 @@ public class ChampionMessageEventHandler implements MessageEvent {
             .findOneByChampionOrderByStarsAsc(championName);
 
         if (championStats == null) {
-            throw new EntityDoesNotExistException("Invalid champion provided");
+            throw new EntityDoesNotExistException("Invalid champion provided!");
         }
 
-        embedBuilder.addField("DPS", String.valueOf(championStats.getDps()), true);
+        embedBuilder.addField("Health", String.valueOf(championStats.getHealth()), true);
         embedBuilder.addField("Damage", String.valueOf(championStats.getDamage()), true);
 
         Double attackSpeed = DiscordMessageHelper.formatDouble(championStats.getAttackSpeed());
