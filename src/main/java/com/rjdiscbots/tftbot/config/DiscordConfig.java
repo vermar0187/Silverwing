@@ -9,18 +9,28 @@ public class DiscordConfig {
 
     private String token;
 
-    private boolean production;
+    private String patch;
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+    private boolean production;
 
     public String getToken() {
         return token;
     }
 
+    public String getPatch() {
+        return patch;
+    }
+
     public boolean isProduction() {
         return production;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setPatch(String patch) {
+        this.patch = patch;
     }
 
     public void setProduction(boolean production) {

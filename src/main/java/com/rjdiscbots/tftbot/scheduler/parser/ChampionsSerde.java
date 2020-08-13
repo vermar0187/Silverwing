@@ -2,13 +2,17 @@ package com.rjdiscbots.tftbot.scheduler.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsRepository;
 import com.rjdiscbots.tftbot.db.champions.ChampionsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
+import com.rjdiscbots.tftbot.exceptions.parser.JsonFieldDoesNotExistException;
+import com.rjdiscbots.tftbot.utility.JsonParserHelper;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +20,65 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChampionsParser {
+public class ChampionsSerde {
 
     private ChampionsRepository championsRepository;
 
     private ChampionStatsRepository championStatsRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(ChampionsParser.class);
+    private final Logger logger = LoggerFactory.getLogger(ChampionsSerde.class);
 
     @Autowired
-    public ChampionsParser(ChampionsRepository championsRepository,
+    public ChampionsSerde(ChampionsRepository championsRepository,
         ChampionStatsRepository championStatsRepository) {
         this.championsRepository = championsRepository;
         this.championStatsRepository = championStatsRepository;
     }
 
-    public void deserializeChampionInfo(JsonNode championNodes) {
-        if (championNodes == null) {
-            return;
+    public JsonNode serializeChampions(@NonNull JsonNode champions,
+        @NonNull JsonNode updatedChampions) throws JsonFieldDoesNotExistException {
+        if (champions.isMissingNode() || updatedChampions.isMissingNode()) {
+            throw new JsonFieldDoesNotExistException("Champion set does not exist");
+        }
+
+        Map<String, List<JsonNode>> oldToNewChamps = JsonParserHelper
+            .matchingJsonNodesByFieldValue(champions,
+                updatedChampions, "apiName");
+
+        for (Map.Entry<String, List<JsonNode>> entry : oldToNewChamps.entrySet()) {
+            List<JsonNode> jsonNodes = entry.getValue();
+            if (jsonNodes.size() != 2) {
+                continue;
+            }
+            JsonNode oldChamp = jsonNodes.get(0);
+            JsonNode newChamp = jsonNodes.get(1);
+
+            if (oldChamp.path("ability").path("variables").isMissingNode() || newChamp
+                .path("ability").path("variables").isMissingNode()) {
+                throw new JsonFieldDoesNotExistException("Variables for champion does not exist");
+            }
+
+            JsonNode oldVariables = oldChamp.path("ability").path("variables");
+            JsonNode newVariables = newChamp.path("ability").path("variables");
+
+            Map<String, List<JsonNode>> oldVarsToNewVars = JsonParserHelper
+                .matchingJsonNodesByFieldValue(oldVariables,
+                    newVariables, "name");
+
+            for (Map.Entry<String, List<JsonNode>> var : oldVarsToNewVars.entrySet()) {
+                ObjectNode objectNode1 = (ObjectNode) var.getValue().get(0);
+                ObjectNode objectNode2 = (ObjectNode) var.getValue().get(1);
+                objectNode1.replace("value", objectNode2.get("value"));
+            }
+        }
+
+        return champions;
+    }
+
+    public void deserializeChampionInfo(JsonNode championNodes)
+        throws JsonFieldDoesNotExistException {
+        if (championNodes.isMissingNode()) {
+            throw new JsonFieldDoesNotExistException("Champion set does not exist");
         }
 
         Iterator<JsonNode> championIterator = championNodes.elements();
@@ -107,4 +152,5 @@ public class ChampionsParser {
 
         return championStatsEntity;
     }
+
 }
