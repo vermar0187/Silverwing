@@ -50,8 +50,8 @@ public class CompositionMessageEventHandler implements MessageEvent {
 
         fetchComposition(compositionName, embedBuilder);
 
-        String picUrl = "pengu.png";
-        filePathMap.put(picUrl, "patch/" + picUrl);
+        String picUrl = "tft_icon.png";
+        filePathMap.put(picUrl, "assets/" + picUrl);
         embedBuilder.setThumbnail("attachment://" + picUrl);
     }
 

@@ -37,7 +37,7 @@ public class MessageServiceImpl implements MessageService {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         Map<String, String> filePathMap = new HashMap<>();
-        embedBuilder.setAuthor("TFT Bot", null, "attachment://tft_icon.png");
+        embedBuilder.setAuthor("TFT Bot", null, "attachment://silverwing.png");
 
         try {
             MessageEvent messageEventHandler = messageEventFactory
@@ -67,8 +67,8 @@ public class MessageServiceImpl implements MessageService {
 
     private void sendEmbedMessage(MessageChannel messageChannel, EmbedBuilder embedBuilder,
         Map<String, String> filePathMap) {
-        File tftIconFile = new File("assets/tft_icon.png");
-        MessageAction messageAction = messageChannel.sendFile(tftIconFile, "tft_icon.png");
+        File tftIconFile = new File("assets/silverwing.png");
+        MessageAction messageAction = messageChannel.sendFile(tftIconFile, "silverwing.png");
 
         for (Map.Entry<String, String> fileName : filePathMap.entrySet()) {
             File imgFile = new File(fileName.getValue());

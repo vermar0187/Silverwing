@@ -49,8 +49,8 @@ public class BuildMessageEventHandler implements MessageEvent {
 
         fetchItemBuilds(itemComponents, addDesc, embedBuilder);
 
-        String picUrl = "pengu.png";
-        filePathMap.put(picUrl, "patch/" + picUrl);
+        String picUrl = "tft_icon.png";
+        filePathMap.put(picUrl, "assets/" + picUrl);
         embedBuilder.setThumbnail("attachment://" + picUrl);
     }
 
