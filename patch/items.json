@@ -1,0 +1,488 @@
+[
+  {
+    "id": 11,
+    "name": "deathblade",
+    "description": "Contributing to a kill grants +25 Attack Damage for the remainder of combat. This effect can stack any number of times (starting at 1)",
+    "component1": 1,
+    "component2": 1,
+    "component1_name": "b.f. sword",
+    "component2_name": "b.f. sword"
+  },
+  {
+    "id": 12,
+    "name": "giant slayer",
+    "description": "Attacks and spells deal 20% bonus damage as true damage. If enemy max Health is over 1750, deal 80% bonus true damage instead",
+    "component1": 1,
+    "component2": 2,
+    "component1_name": "b.f. sword",
+    "component2_name": "recurve bow"
+  },
+  {
+    "id": 28,
+    "name": "infiltrator's talons",
+    "description": "Wearer is also an Infiltrator",
+    "component1": 2,
+    "component2": 8,
+    "component1_name": "recurve bow",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 78,
+    "name": "protector's chestguard",
+    "description": "Wearer is also a Protector",
+    "component1": 7,
+    "component2": 8,
+    "component1_name": "giant's belt",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 88,
+    "name": "force of nature",
+    "description": "Gain +1 team size",
+    "component1": 8,
+    "component2": 8,
+    "component1_name": "spatula",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 38,
+    "name": "battlecast armor",
+    "description": "Wearer is also a Battlecast",
+    "component1": 3,
+    "component2": 8,
+    "component1_name": "needlessly large rod",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 48,
+    "name": "star guardian's charm",
+    "description": "Wearer is also a Star Guardian",
+    "component1": 4,
+    "component2": 8,
+    "component1_name": "tear of the goddess",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 39,
+    "name": "jeweled gauntlet",
+    "description": "The wearer's spells can critically strike and holder gains +30% Critical Strike Damage",
+    "component1": 3,
+    "component2": 9,
+    "component1_name": "needlessly large rod",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 29,
+    "name": "last whisper",
+    "description": "Critical hits reduce the target’s Armor by 75% for 3 seconds. This effect does not stack",
+    "component1": 2,
+    "component2": 9,
+    "component1_name": "recurve bow",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 49,
+    "name": "hand of justice",
+    "description": "Each planning phase, gain one: Deal +50% more damage / Basic Attack heal 50 health on Hit",
+    "component1": 4,
+    "component2": 9,
+    "component1_name": "tear of the goddess",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 59,
+    "name": "shroud of stillness",
+    "description": "When combat begins, shoots a beam straight ahead that delays affected enemies' first spellcast, increasing their max Mana by 40% until they cast",
+    "component1": 5,
+    "component2": 9,
+    "component1_name": "chain vest",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 89,
+    "name": "dark star's heart",
+    "description": "Wearer is also a Dark Star",
+    "component1": 8,
+    "component2": 9,
+    "component1_name": "spatula",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 69,
+    "name": "quicksilver",
+    "description": "[UNIQUE] The wearer is immute to croud control for the first 10 seconds of combat",
+    "component1": 6,
+    "component2": 9,
+    "component1_name": "negatron cloak",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 99,
+    "name": "thief's gloves",
+    "description": "Each planning phase, fetch two temporary items, quality based upon your player level. [Consumes Three item Slots]",
+    "component1": 9,
+    "component2": 9,
+    "component1_name": "sparring gloves",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 79,
+    "name": "trap claw",
+    "description": "Start combat with a spell shield. Stun the champion that breaks it for 4 sec",
+    "component1": 7,
+    "component2": 9,
+    "component1_name": "giant's belt",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 1,
+    "name": "b.f. sword",
+    "description": "15 Attack damage",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 2,
+    "name": "recurve bow",
+    "description": "20% Attack speed",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 3,
+    "name": "needlessly large rod",
+    "description": "20 Spell power",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 4,
+    "name": "tear of the goddess",
+    "description": "15 Mana",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 5,
+    "name": "chain vest",
+    "description": "25 Armor",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 6,
+    "name": "negatron cloak",
+    "description": "25 Magic resist",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 7,
+    "name": "giant's belt",
+    "description": "200 Health",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 8,
+    "name": "spatula",
+    "description": "It must do something...",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 9,
+    "name": "sparring gloves",
+    "description": "10% Crit and +10% Dodge chance",
+    "component1": null,
+    "component2": null,
+    "component1_name": null,
+    "component2_name": null
+  },
+  {
+    "id": 22,
+    "name": "rapid firecannon",
+    "description": "Attack Range is tripled and attacks cannot miss",
+    "component1": 2,
+    "component2": 2,
+    "component1_name": "recurve bow",
+    "component2_name": "recurve bow"
+  },
+  {
+    "id": 13,
+    "name": "hextech gunblade",
+    "description": "Heal for 45% of all spell damage dealt",
+    "component1": 1,
+    "component2": 3,
+    "component1_name": "b.f. sword",
+    "component2_name": "needlessly large rod"
+  },
+  {
+    "id": 23,
+    "name": "guinsoo's rageblade",
+    "description": "Basic Attacks grant +5% bonus Attack Speed for the rest of combat. No stacking limit",
+    "component1": 2,
+    "component2": 3,
+    "component1_name": "recurve bow",
+    "component2_name": "needlessly large rod"
+  },
+  {
+    "id": 14,
+    "name": "spear of shojin",
+    "description": "After casting, wearer gains 18% of its max Mana per attack",
+    "component1": 1,
+    "component2": 4,
+    "component1_name": "b.f. sword",
+    "component2_name": "tear of the goddess"
+  },
+  {
+    "id": 24,
+    "name": "statikk shiv",
+    "description": "Every third Basic Attack from the wearer deals 90 magic damage to 3/4/5 enemies",
+    "component1": 2,
+    "component2": 4,
+    "component1_name": "recurve bow",
+    "component2_name": "tear of the goddess"
+  },
+  {
+    "id": 25,
+    "name": "titan's resolve",
+    "description": "When the wearer takes damage or inflicts a critical hit, they gain a 2% stacking damage bonus. Stacks up to 50 times, at which point the wearer gains 25 Armor and Magic Resistance, and increases in size",
+    "component1": 2,
+    "component2": 5,
+    "component1_name": "recurve bow",
+    "component2_name": "chain vest"
+  },
+  {
+    "id": 15,
+    "name": "guardian angel",
+    "description": "Wearer revives with 400 HP",
+    "component1": 1,
+    "component2": 5,
+    "component1_name": "b.f. sword",
+    "component2_name": "chain vest"
+  },
+  {
+    "id": 16,
+    "name": "bloodthirster",
+    "description": "Basic Attacks heal the wearer for 45% of the damage dealt",
+    "component1": 1,
+    "component2": 6,
+    "component1_name": "b.f. sword",
+    "component2_name": "negatron cloak"
+  },
+  {
+    "id": 26,
+    "name": "runaan's hurricane",
+    "description": "Basic Attacks fire a bolt at another nearby enemy, dealing 70% of the wearer's Attack Damage and applying on-hit effects",
+    "component1": 2,
+    "component2": 6,
+    "component1_name": "recurve bow",
+    "component2_name": "negatron cloak"
+  },
+  {
+    "id": 17,
+    "name": "zeke's herald",
+    "description": "When combat begins, the wearer and all allies within 1 hex in the same row gain +30% Attack Speed for the rest of combat",
+    "component1": 1,
+    "component2": 7,
+    "component1_name": "b.f. sword",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 27,
+    "name": "zz'rot portal",
+    "description": "When the wearer dies, a Construct with 1500/2250/3000 ★ Health aries to continue the fight",
+    "component1": 2,
+    "component2": 7,
+    "component1_name": "recurve bow",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 18,
+    "name": "blade of the ruined king",
+    "description": "Wearer is also a Blademaster",
+    "component1": 1,
+    "component2": 8,
+    "component1_name": "b.f. sword",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 19,
+    "name": "infinity edge",
+    "description": "[UNIQUE] The holder gains 100% critical hit chance, and 20% bonus critical strike damage",
+    "component1": 1,
+    "component2": 9,
+    "component1_name": "b.f. sword",
+    "component2_name": "sparring gloves"
+  },
+  {
+    "id": 33,
+    "name": "rabadon's deathcap",
+    "description": "Wearer's Spell Power stat is amplified by 50%",
+    "component1": 3,
+    "component2": 3,
+    "component1_name": "needlessly large rod",
+    "component2_name": "needlessly large rod"
+  },
+  {
+    "id": 34,
+    "name": "luden's echo",
+    "description": "When the wearer casts their spell, the first target dealt magic damage and up to 3 nearby enemies are dealt an additional 200 magic damage",
+    "component1": 3,
+    "component2": 4,
+    "component1_name": "needlessly large rod",
+    "component2_name": "tear of the goddess"
+  },
+  {
+    "id": 45,
+    "name": "frozen heart",
+    "description": "Adjacent enemies lose 50% Attack Speed. (Stacking increases the radius of this effect, not the amount of the slow)",
+    "component1": 4,
+    "component2": 5,
+    "component1_name": "tear of the goddess",
+    "component2_name": "chain vest"
+  },
+  {
+    "id": 35,
+    "name": "locket of the iron solari",
+    "description": "Shields allies within two hexes in the same row for 250 / 275 / 350 damage for 8 seconds (scales with wearer’s Star Level)",
+    "component1": 3,
+    "component2": 5,
+    "component1_name": "needlessly large rod",
+    "component2_name": "chain vest"
+  },
+  {
+    "id": 55,
+    "name": "bramble vest",
+    "description": "Negates bonus damage from incoming critical hits. On being hit by a Basic Attack, deal 100 / 140 / 200 magic damage to all nearby enemies (once every 2.5 second maximum). Scales with wearer’s Star Level",
+    "component1": 5,
+    "component2": 5,
+    "component1_name": "chain vest",
+    "component2_name": "chain vest"
+  },
+  {
+    "id": 66,
+    "name": "dragon's claw",
+    "description": "Reduces incoming magic damage by 50%",
+    "component1": 6,
+    "component2": 6,
+    "component1_name": "negatron cloak",
+    "component2_name": "negatron cloak"
+  },
+  {
+    "id": 46,
+    "name": "chalice of favor",
+    "description": "At start of combat, the holder and their left and right neighbors gain 30 AP for 20 seconds",
+    "component1": 4,
+    "component2": 6,
+    "component1_name": "tear of the goddess",
+    "component2_name": "negatron cloak"
+  },
+  {
+    "id": 36,
+    "name": "ionic spark",
+    "description": "Enemies within 2 hexes have their Magic Resist reduced by 50% (does not stack). When they cast a spell, they are zapped taking magic damage equal to 225% of their max Mana",
+    "component1": 3,
+    "component2": 6,
+    "component1_name": "needlessly large rod",
+    "component2_name": "negatron cloak"
+  },
+  {
+    "id": 56,
+    "name": "sword breaker",
+    "description": "25% chance to disarm for 3 seconds",
+    "component1": 5,
+    "component2": 6,
+    "component1_name": "chain vest",
+    "component2_name": "negatron cloak"
+  },
+  {
+    "id": 47,
+    "name": "redemption",
+    "description": "When the wearer dies, allies are healed for 800 Health",
+    "component1": 4,
+    "component2": 7,
+    "component1_name": "tear of the goddess",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 37,
+    "name": "morellonomicon",
+    "description": "When the wearer deals damage with their spell, they burn the target, dealing 25% of the target's Maximum Health as true damage over 10 seconds and reducing healing by 50% for the duration of the burn",
+    "component1": 3,
+    "component2": 7,
+    "component1_name": "needlessly large rod",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 57,
+    "name": "red buff",
+    "description": "Wearer's Basic Attacks burn the target on-hit, dealing 10% of the target's Maximum Health as true damage over 4 seconds and reducing healing by 50% for the duration of the burn",
+    "component1": 5,
+    "component2": 7,
+    "component1_name": "chain vest",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 67,
+    "name": "zephyr",
+    "description": "When combat begins, the wearer summons a whirlwind on the opposite side of the arena that removes the closest enemy from combat for 5 seconds",
+    "component1": 6,
+    "component2": 7,
+    "component1_name": "negatron cloak",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 77,
+    "name": "warmog's armor",
+    "description": "Grants 600 health",
+    "component1": 7,
+    "component2": 7,
+    "component1_name": "giant's belt",
+    "component2_name": "giant's belt"
+  },
+  {
+    "id": 68,
+    "name": "celestial orb",
+    "description": "The wearer gains the Celestial trait",
+    "component1": 6,
+    "component2": 8,
+    "component1_name": "negatron cloak",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 58,
+    "name": "rebel medal",
+    "description": "Wearer is also a Rebel",
+    "component1": 5,
+    "component2": 8,
+    "component1_name": "chain vest",
+    "component2_name": "spatula"
+  },
+  {
+    "id": 44,
+    "name": "blue buff",
+    "description": "[UNIQUE] After casting a spell, set your mana to 20",
+    "component1": 4,
+    "component2": 4,
+    "component1_name": "tear of the goddess",
+    "component2_name": "tear of the goddess"
+  }
+]

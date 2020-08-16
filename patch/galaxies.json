@@ -1,0 +1,47 @@
+[
+  {
+    "key": "TFT3_GameVariation_Bonanza",
+    "name": "treasure trove",
+    "description": "All minions and monsters drop a loot orb."
+  },
+  {
+    "key": "TFT3_GameVariation_FreeRerolls",
+    "name": "trade sector",
+    "description": "All players receive one free reroll per round. Free rerolls cannot be saved up."
+  },
+  {
+    "key": "TFT3_GameVariation_MidGameFoN",
+    "name": "superdense galaxy",
+    "description": "Receive a free Force of Nature after the stage 3 carousel."
+  },
+  {
+    "key": "TFT3_GameVariation_None",
+    "name": "normal game",
+    "description": "No special rules."
+  },
+  {
+    "key": "TFT3_GameVariation_StartingItems",
+    "name": "galactic armory",
+    "description": "All players start with the same 2 completed items."
+  },
+  {
+    "key": "TFT3_GameVariation_TwoStarCarousels",
+    "name": "star cluster",
+    "description": "1, 2, and 3 cost units on carousels have two stars."
+  },
+  {
+    "key": "TFT3_GameVariation_TwoItemMax",
+    "name": "binary star",
+    "description": "Champions can only equip two items."
+  },
+  {
+    "key": "TFT3_GameVariation_SmallerBoards",
+    "name": "dwarf planet",
+    "description": "The nearest and farthest rows on every board are impassable. Units cannot be placed in impassable hexes during planning and cannot enter them during combat."
+  },
+  {
+    "key": "TFT3_GameVariation_Dreadnova",
+    "name": "plunder planet",
+    "description": "All champions have a chance to drop a coin, especially the first one."
+  }
+]

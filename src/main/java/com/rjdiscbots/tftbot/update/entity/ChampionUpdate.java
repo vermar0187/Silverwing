@@ -1,14 +1,20 @@
-package com.rjdiscbots.tftbot.scheduler.parser;
+package com.rjdiscbots.tftbot.update.entity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.rjdiscbots.tftbot.config.DiscordConfig;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionStatsRepository;
 import com.rjdiscbots.tftbot.db.champions.ChampionsEntity;
 import com.rjdiscbots.tftbot.db.champions.ChampionsRepository;
 import com.rjdiscbots.tftbot.exceptions.parser.JsonFieldDoesNotExistException;
+import com.rjdiscbots.tftbot.exceptions.parser.PatchProcessingException;
+import com.rjdiscbots.tftbot.update.UpdateEntity;
 import com.rjdiscbots.tftbot.utility.JsonParserHelper;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,29 +26,52 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChampionsSerde {
+public class ChampionUpdate implements UpdateEntity {
 
     private ChampionsRepository championsRepository;
 
     private ChampionStatsRepository championStatsRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(ChampionsSerde.class);
+    private final Logger logger = LoggerFactory.getLogger(ChampionUpdate.class);
+
+    private DiscordConfig discordConfig;
 
     @Autowired
-    public ChampionsSerde(ChampionsRepository championsRepository,
-        ChampionStatsRepository championStatsRepository) {
+    public ChampionUpdate(ChampionsRepository championsRepository,
+        ChampionStatsRepository championStatsRepository, DiscordConfig discordConfig) {
         this.championsRepository = championsRepository;
         this.championStatsRepository = championStatsRepository;
+        this.discordConfig = discordConfig;
     }
 
-    public JsonNode serializeChampions(@NonNull JsonNode champions,
+    @Override
+    public void patch() throws PatchProcessingException, IOException {
+        File oldPatch = new File("patch/en_us.json");
+        URL patchURL = new URL(discordConfig.getPatch());
+
+        JsonNode oldChampNode = objectMapper.readTree(oldPatch).at("/sets/3/champions");
+        JsonNode newChampNode = objectMapper.readTree(patchURL).at("/sets/3/champions");
+
+        try {
+            oldChampNode = update(oldChampNode, newChampNode);
+        } catch (PatchProcessingException e) {
+            throw new PatchProcessingException(
+                String.format("Could not use patch url: %s. Will save using current patch.",
+                    discordConfig.getPatch()));
+        } finally {
+            save(oldChampNode);
+        }
+    }
+
+    @Override
+    public JsonNode update(@NonNull JsonNode oldChampions,
         @NonNull JsonNode updatedChampions) throws JsonFieldDoesNotExistException {
-        if (champions.isMissingNode() || updatedChampions.isMissingNode()) {
-            throw new JsonFieldDoesNotExistException("Champion set does not exist");
+        if (oldChampions.isMissingNode() || updatedChampions.isMissingNode()) {
+            throw new JsonFieldDoesNotExistException("Champions do not exist");
         }
 
         Map<String, List<JsonNode>> oldToNewChamps = JsonParserHelper
-            .matchingJsonNodesByFieldValue(champions,
+            .matchingJsonNodesByFieldValue(oldChampions,
                 updatedChampions, "apiName");
 
         for (Map.Entry<String, List<JsonNode>> entry : oldToNewChamps.entrySet()) {
@@ -72,16 +101,16 @@ public class ChampionsSerde {
             }
         }
 
-        return champions;
+        return oldChampions;
     }
 
-    public void deserializeChampionInfo(JsonNode championNodes)
-        throws JsonFieldDoesNotExistException {
-        if (championNodes.isMissingNode()) {
+    @Override
+    public void save(@NonNull JsonNode champions) throws JsonFieldDoesNotExistException {
+        if (champions.isMissingNode()) {
             throw new JsonFieldDoesNotExistException("Champion set does not exist");
         }
 
-        Iterator<JsonNode> championIterator = championNodes.elements();
+        Iterator<JsonNode> championIterator = champions.elements();
 
         while (championIterator.hasNext()) {
             JsonNode championNode = championIterator.next();

@@ -11,7 +11,7 @@ public class DiscordConfig {
 
     private String patch;
 
-    private boolean production;
+    private boolean update;
 
     public String getToken() {
         return token;
@@ -21,8 +21,8 @@ public class DiscordConfig {
         return patch;
     }
 
-    public boolean isProduction() {
-        return production;
+    public boolean isUpdate() {
+        return update;
     }
 
     public void setToken(String token) {
@@ -33,7 +33,7 @@ public class DiscordConfig {
         this.patch = patch;
     }
 
-    public void setProduction(boolean production) {
-        this.production = production;
+    public void setUpdate(boolean update) {
+        this.update = update;
     }
 }
