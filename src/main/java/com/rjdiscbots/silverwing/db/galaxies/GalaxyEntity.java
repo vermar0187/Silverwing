@@ -11,12 +11,13 @@ import javax.persistence.Table;
 public class GalaxyEntity implements Serializable {
 
     @Id
+    @Column(columnDefinition = "text")
     private String key;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "text")
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "text")
     private String descripiton;
 
     public GalaxyEntity() {

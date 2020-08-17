@@ -21,13 +21,13 @@ public class CompositionItemsEntity {
     @Column(name = "cci_id", nullable = false)
     private int id;
 
-    @Column(name = "comp_name", nullable = false)
+    @Column(name = "comp_name", nullable = false, columnDefinition = "text")
     private String compName;
 
-    @Column(name = "champion_name", nullable = false)
+    @Column(name = "champion_name", nullable = false, columnDefinition = "text")
     private String championName;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String stage;
 
     @Type(type = "list-array")

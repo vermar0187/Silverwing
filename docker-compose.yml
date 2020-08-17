@@ -1,0 +1,26 @@
+version: '3.1'
+services:
+  app:
+    container_name: silverwing
+    image: silverwing
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - dbpostgresql
+    environment:
+      - SILVERWING_OAUTH_TOKEN= # Add token
+      - UPDATE_SILVERWING=true
+      - TFT_PATCH=http://raw.communitydragon.org/10.16/cdragon/tft/en_us.json
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=discordtftbot
+      - POSTGRES_HOST=dbpostgresql
+  dbpostgresql:
+    image: postgres
+    ports:
+      - "8081:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=discordtftbot

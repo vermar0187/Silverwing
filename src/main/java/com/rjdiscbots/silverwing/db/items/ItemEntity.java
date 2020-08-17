@@ -12,22 +12,22 @@ public class ItemEntity {
     @Id
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "text")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
     @Column(name = "component1")
     private Integer componentOne;
 
-    @Column(name = "component1_name")
+    @Column(name = "component1_name", columnDefinition = "text")
     private String componentOneName;
 
     @Column(name = "component2")
     private Integer componentTwo;
 
-    @Column(name = "component2_name")
+    @Column(name = "component2_name", columnDefinition = "text")
     private String componentTwoName;
 
     public ItemEntity() {

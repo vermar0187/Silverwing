@@ -20,10 +20,10 @@ import org.hibernate.annotations.TypeDefs;
 public class ChampionsEntity {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "text")
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "text")
     private String name;
 
     @Column(name = "cost", nullable = false)

@@ -18,7 +18,7 @@ import org.hibernate.annotations.TypeDefs;
 public class CompositionEntity {
 
     @Id
-    @Column(name = "comp_name")
+    @Column(name = "comp_name", columnDefinition = "text")
     private String name;
 
     @Column(name = "tft_set", nullable = false)
@@ -45,7 +45,7 @@ public class CompositionEntity {
     )
     private List<String> begComp;
 
-    @Column(name = "comp_strategy")
+    @Column(name = "comp_strategy", columnDefinition = "text")
     private String compStrategy;
 
     public CompositionEntity() {

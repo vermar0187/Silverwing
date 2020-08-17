@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class ChampionStatsEntity {
 
     @Id
-    @Column
+    @Column(columnDefinition = "text")
     private String id;
 
     @Column

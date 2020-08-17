@@ -19,19 +19,19 @@ import org.hibernate.annotations.TypeDefs;
 public class SynergyEntity {
 
     @Id
-    @Column(name = "key")
+    @Column(name = "key", columnDefinition = "text")
     private String key;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "text")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "type")
+    @Column(name = "type", columnDefinition = "text")
     private String type;
 
-    @Column(name = "innate")
+    @Column(name = "innate", columnDefinition = "text")
     private String innate;
 
     @Type(type = "jsonb")
