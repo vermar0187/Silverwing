@@ -91,7 +91,8 @@ public class ChampionUpdate implements UpdateEntity {
             JsonNode newVariables = newChamp.path("ability").path("variables");
 
             Map<String, List<JsonNode>> oldVarsToNewVars = JsonParserHelper
-                .matchingJsonNodesByFieldValue(oldVariables,
+                .matchingJsonNodesByFieldValue(
+                    oldVariables,
                     newVariables, "name");
 
             for (Map.Entry<String, List<JsonNode>> var : oldVarsToNewVars.entrySet()) {
@@ -111,27 +112,35 @@ public class ChampionUpdate implements UpdateEntity {
         }
 
         Iterator<JsonNode> championIterator = champions.elements();
+        List<ChampionsEntity> championsEntities = new ArrayList<>();
+        List<ChampionStatsEntity> championStatsEntities = new ArrayList<>();
 
         while (championIterator.hasNext()) {
             JsonNode championNode = championIterator.next();
 
-            ChampionsEntity championsEntity = null;
-            ChampionStatsEntity championStatsEntity = null;
+            ChampionsEntity championsEntity;
+            ChampionStatsEntity championStatsEntity;
 
             try {
                 championsEntity = createChampionsEntity(championNode);
                 championStatsEntity = createChampionStatsEntity(championNode);
+                championsEntities.add(championsEntity);
+                championStatsEntities.add(championStatsEntity);
             } catch (Exception e) {
                 logger.info(e.getMessage(), e.fillInStackTrace());
-                continue;
             }
+        }
 
-            try {
-                championsRepository.save(championsEntity);
-                championStatsRepository.save(championStatsEntity);
-            } catch (Exception e) {
-                logger.warn(e.getMessage(), e.fillInStackTrace());
-            }
+        try {
+            championsRepository.saveAll(championsEntities);
+        } catch (Exception e) {
+            logger.warn(e.getMessage(), e.fillInStackTrace());
+        }
+
+        try {
+            championStatsRepository.saveAll(championStatsEntities);
+        } catch (Exception e) {
+            logger.warn(e.getMessage(), e.fillInStackTrace());
         }
     }
 
@@ -141,16 +150,17 @@ public class ChampionUpdate implements UpdateEntity {
         List<String> championTraits = new ArrayList<>();
         JsonNode traitNodes = championNode.get("traits");
 
-        if (traitNodes.isArray()) {
+        if (traitNodes != null && traitNodes.isArray()) {
             ArrayNode traitNodeArray = (ArrayNode) traitNodes;
             for (JsonNode traitNode : traitNodeArray) {
                 championTraits.add(traitNode.asText().toLowerCase());
             }
         }
 
-        championsEntity.setCost(championNode.get("cost").asInt());
-        championsEntity.setId(championNode.get("apiName").asText());
-        championsEntity.setName(championNode.get("name").asText().toLowerCase());
+        championsEntity.setCost(JsonParserHelper.integerFieldParse("cost", championNode));
+        championsEntity.setId(JsonParserHelper.stringFieldParse("apiName", championNode));
+        championsEntity
+            .setName(JsonParserHelper.stringFieldParse("name", championNode).toLowerCase());
         championsEntity.setTraits(championTraits);
         championsEntity.setAbility(championNode.get("ability").toString());
 

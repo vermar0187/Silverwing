@@ -17,42 +17,43 @@ public class ChampionStatsEntity {
     private String champion;
 
     @Column
-    private int stars;
+    private Integer stars;
 
     @Column
-    private int dps;
+    private Integer dps;
 
     @Column(name = "atk_speed")
-    private double attackSpeed;
+    private Double attackSpeed;
 
     @Column
-    private int damage;
+    private Integer damage;
 
     @Column
-    private int range;
+    private Integer range;
 
     @Column
-    private int health;
+    private Integer health;
 
     @Column
-    private int mana;
+    private Integer mana;
 
     @Column(name = "initial_mana")
-    private int initialMana;
+    private Integer initialMana;
 
     @Column
-    private int armor;
+    private Integer armor;
 
     @Column
-    private int mr;
+    private Integer mr;
 
     public ChampionStatsEntity() {
 
     }
 
-    public ChampionStatsEntity(String id, String champion, int stars, int dps,
-        double attackSpeed, int damage, int range, int health, int mana, int initialMana, int armor,
-        int mr) {
+    public ChampionStatsEntity(String id, String champion, Integer stars, Integer dps,
+        Double attackSpeed, Integer damage, Integer range, Integer health, Integer mana,
+        Integer initialMana, Integer armor,
+        Integer mr) {
         this.id = id;
         this.champion = champion;
         this.stars = stars;
@@ -83,83 +84,83 @@ public class ChampionStatsEntity {
         this.champion = champion;
     }
 
-    public int getStars() {
+    public Integer getStars() {
         return stars;
     }
 
-    public void setStars(int stars) {
+    public void setStars(Integer stars) {
         this.stars = stars;
     }
 
-    public int getDps() {
+    public Integer getDps() {
         return dps;
     }
 
-    public void setDps(int dps) {
+    public void setDps(Integer dps) {
         this.dps = dps;
     }
 
-    public double getAttackSpeed() {
+    public Double getAttackSpeed() {
         return attackSpeed;
     }
 
-    public void setAttackSpeed(double attackSpeed) {
+    public void setAttackSpeed(Double attackSpeed) {
         this.attackSpeed = attackSpeed;
     }
 
-    public int getDamage() {
+    public Integer getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    public void setDamage(Integer damage) {
         this.damage = damage;
     }
 
-    public int getRange() {
+    public Integer getRange() {
         return range;
     }
 
-    public void setRange(int range) {
+    public void setRange(Integer range) {
         this.range = range;
     }
 
-    public int getHealth() {
+    public Integer getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(Integer health) {
         this.health = health;
     }
 
-    public int getMana() {
+    public Integer getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
+    public void setMana(Integer mana) {
         this.mana = mana;
     }
 
-    public int getInitialMana() {
+    public Integer getInitialMana() {
         return initialMana;
     }
 
-    public void setInitialMana(int initialMana) {
+    public void setInitialMana(Integer initialMana) {
         this.initialMana = initialMana;
     }
 
-    public int getArmor() {
+    public Integer getArmor() {
         return armor;
     }
 
-    public void setArmor(int armor) {
+    public void setArmor(Integer armor) {
         this.armor = armor;
     }
 
-    public int getMr() {
+    public Integer getMr() {
         return mr;
     }
 
-    public void setMr(int mr) {
+    public void setMr(Integer mr) {
         this.mr = mr;
     }
 }

@@ -27,7 +27,7 @@ public class ChampionsEntity {
     private String name;
 
     @Column(name = "cost", nullable = false)
-    private int cost;
+    private Integer cost;
 
     @Type(type = "list-array")
     @Column(
@@ -43,7 +43,7 @@ public class ChampionsEntity {
     public ChampionsEntity() {
     }
 
-    public ChampionsEntity(String id, String name, int cost, List<String> traits,
+    public ChampionsEntity(String id, String name, Integer cost, List<String> traits,
         String ability) {
         this.id = id;
         this.name = name;
@@ -68,11 +68,11 @@ public class ChampionsEntity {
         this.name = name;
     }
 
-    public int getCost() {
+    public Integer getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(Integer cost) {
         this.cost = cost;
     }
 

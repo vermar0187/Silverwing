@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class ItemEntity {
 
     @Id
-    private int id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -34,7 +34,7 @@ public class ItemEntity {
 
     }
 
-    public ItemEntity(int id, String name, String description, Integer componentOne,
+    public ItemEntity(Integer id, String name, String description, Integer componentOne,
         Integer componentTwo, String componentOneName, String componentTwoName) {
         this.id = id;
         this.name = name;
@@ -46,11 +46,11 @@ public class ItemEntity {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
